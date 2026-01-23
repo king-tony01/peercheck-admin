@@ -1,0 +1,14 @@
+.format_status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid #e2e4e9;
+}
+.format_status span {
+  display: block;
+  font-size: 0.8rem;
+  color: #525866;
+  font-weight: 500;
+}/*# sourceMappingURL=FormatStatus.module.css.map */

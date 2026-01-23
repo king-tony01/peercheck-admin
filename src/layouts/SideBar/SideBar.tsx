@@ -1,0 +1,95 @@
+"use client";
+
+import { ROUTE_PATHS } from "@/app/routePaths";
+import DashboardIcon from "@/icons/DashboardIcon";
+import SideBarSection from "./components/SideBarSection";
+import AnalyticsIcon from "@/icons/AnalyticsIcon";
+import CompaniesIcon from "@/icons/CompaniesIcon";
+import InstitutionsIcon from "@/icons/InstitutionsIcon";
+import ReviewsIcon from "@/icons/ReviewsIcon";
+import TeamIcon from "@/icons/TeamIcon";
+import BillingIcon from "@/icons/BillingIcon";
+import SupportIcon from "@/icons/SupportIcon";
+import SettingsIcon from "@/icons/SettingsIcon";
+import Image from "next/image";
+import styles from "./styles/SideBar.module.css";
+import { usePathname } from "next/navigation";
+
+function SideBar() {
+  const pathname = usePathname();
+
+  const navList: NavSection[] = [
+    {
+      sectionTitle: "Main",
+      items: [
+        {
+          title: "Dashboard",
+          icon: <DashboardIcon />,
+          path: ROUTE_PATHS.ADMIN_DASHBOARD,
+        },
+        {
+          title: "Analytics",
+          icon: <AnalyticsIcon />,
+          path: ROUTE_PATHS.ADMIN_ANALYTICS,
+        },
+        {
+          title: "Companies",
+          icon: <CompaniesIcon />,
+          path: ROUTE_PATHS.ADMIN_COMPANIES,
+        },
+        {
+          title: "Institutions",
+          icon: <InstitutionsIcon />,
+          path: ROUTE_PATHS.ADMIN_INSTITUTIONS,
+        },
+        {
+          title: "Reviews",
+          icon: <ReviewsIcon />,
+          path: ROUTE_PATHS.ADMIN_REVIEWS,
+        },
+        {
+          title: "Team",
+          icon: <TeamIcon />,
+          path: ROUTE_PATHS.ADMIN_TEAM,
+        },
+        {
+          title: "Billing",
+          icon: <BillingIcon />,
+          path: ROUTE_PATHS.ADMIN_BILLING,
+        },
+      ],
+    },
+    {
+      sectionTitle: "Others",
+      items: [
+        {
+          title: "Settings",
+          icon: <SettingsIcon />,
+          path: ROUTE_PATHS.ADMIN_SETTINGS,
+        },
+        {
+          title: "Support",
+          icon: <SupportIcon />,
+          path: ROUTE_PATHS.ADMIN_SUPPORT,
+        },
+      ],
+    },
+  ];
+  return (
+    <nav className={styles.side_bar}>
+      <div className={styles.logo_container}>
+        <Image width={100} height={30} src="/logo.png" alt="PeerCheck Logo" />
+      </div>
+      {navList.map((section) => (
+        <SideBarSection
+          key={section.sectionTitle}
+          sectionTitle={section.sectionTitle}
+          items={section.items}
+          currentPath={pathname}
+        />
+      ))}
+    </nav>
+  );
+}
+
+export default SideBar;

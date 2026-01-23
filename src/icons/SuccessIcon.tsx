@@ -1,0 +1,20 @@
+import * as React from "react";
+
+const SuccessIcon: React.FC<React.SVGProps<SVGElement>> = ({
+  color = "#38C793",
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="none"
+    viewBox="0 0 16 16"
+  >
+    <path
+      fill={color}
+      d="M8 14A6 6 0 1 1 8 2a6 6 0 0 1 0 12m-.598-3.6 4.242-4.243-.849-.848-3.393 3.394-1.698-1.697-.848.848z"
+    ></path>
+  </svg>
+);
+
+export default SuccessIcon;

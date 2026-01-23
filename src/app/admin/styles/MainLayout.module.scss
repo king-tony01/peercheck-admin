@@ -1,0 +1,18 @@
+.admin_layout {
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+  height: 100vh;
+  width: 100vw;
+
+  .main_content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    .content_area {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+  }
+}

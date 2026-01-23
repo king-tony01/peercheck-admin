@@ -1,0 +1,128 @@
+.filter_container {
+  position: relative;
+}
+
+.filter_button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #ccc;
+    background: #f9f9f9;
+  }
+
+  &:active {
+    border-color: #999;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.filter_panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  min-width: 280px;
+  padding: 16px;
+}
+
+.filter_section {
+  margin-bottom: 16px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.filter_section_title {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter_options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter_checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+
+  input {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+  }
+
+  label {
+    margin: 0;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    flex: 1;
+  }
+}
+
+.filter_actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.filter_button_apply,
+.filter_button_clear {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter_button_apply {
+  background: #8bdb2f;
+  color: #fff;
+
+  &:hover {
+    background: #7ac927;
+  }
+}
+
+.filter_button_clear {
+  background: #f5f5f5;
+  color: #333;
+
+  &:hover {
+    background: #e8e8e8;
+  }
+}

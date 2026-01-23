@@ -1,0 +1,17 @@
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.3rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.green {
+  background: #effeca;
+  color: #91b33c;
+}
+
+.red {
+  background: #ffe3e2;
+  color: #ff3b30;
+}

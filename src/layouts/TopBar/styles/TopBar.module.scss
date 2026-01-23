@@ -1,0 +1,25 @@
+.top_bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 0.1rem solid var(--border-color, #eaeaea);
+  padding: 1rem;
+
+  h1 {
+    font-family: "Tanker";
+    font-weight: 500;
+  }
+
+  .top_bar_right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    .action_btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+  }
+}

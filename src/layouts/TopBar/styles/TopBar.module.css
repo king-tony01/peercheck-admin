@@ -1,0 +1,22 @@
+.top_bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 0.1rem solid var(--border-color, #eaeaea);
+  padding: 1rem;
+}
+.top_bar h1 {
+  font-family: "Tanker";
+  font-weight: 500;
+}
+.top_bar .top_bar_right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.top_bar .top_bar_right .action_btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}/*# sourceMappingURL=TopBar.module.css.map */

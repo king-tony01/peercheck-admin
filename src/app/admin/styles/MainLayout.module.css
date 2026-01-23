@@ -1,0 +1,16 @@
+.admin_layout {
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+  height: 100vh;
+  width: 100vw;
+}
+.admin_layout .main_content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.admin_layout .main_content .content_area {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}/*# sourceMappingURL=MainLayout.module.css.map */
