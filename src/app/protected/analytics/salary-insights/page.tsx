@@ -10,7 +10,7 @@ import React from "react";
 import styles from "./styles/SalaryInsight.module.css";
 import MetricCard from "@/components/Cards/MetricCard";
 import CustomBarChart from "@/components/Charts/BarChart";
-import CompanyProfileTraffic from "./CompanyProfileTraffic";
+import TopContributors from "./TopContributors";
 import InfoTriangle from "@/icons/InfoTrangle";
 import CustomLineChart from "@/components/Charts/CustomLineChart";
 import DynamicTable from "@/components/Tables/DynamicTable";
@@ -336,7 +336,12 @@ function SalaryInsights() {
                     className={styles.color_label}
                     style={{ background: row.engineer.color }}
                   >
-                    <FormatCurrency value={row.engineer.value} currency="NGN" />
+                    <FormatCurrency
+                      value={row.engineer.value}
+                      currency="NGN"
+                      showFraction={false}
+                      compact
+                    />
                   </div>
                 ),
               },
@@ -349,7 +354,12 @@ function SalaryInsights() {
                     className={styles.color_label}
                     style={{ background: row.designer.color }}
                   >
-                    <FormatCurrency value={row.designer.value} currency="NGN" />
+                    <FormatCurrency
+                      value={row.designer.value}
+                      currency="NGN"
+                      showFraction={false}
+                      compact
+                    />
                   </div>
                 ),
               },
@@ -362,7 +372,12 @@ function SalaryInsights() {
                     className={styles.color_label}
                     style={{ background: row.manager.color }}
                   >
-                    <FormatCurrency value={row.manager.value} currency="NGN" />
+                    <FormatCurrency
+                      value={row.manager.value}
+                      currency="NGN"
+                      showFraction={false}
+                      compact
+                    />
                   </div>
                 ),
               },
@@ -375,7 +390,12 @@ function SalaryInsights() {
                     className={styles.color_label}
                     style={{ background: row.hr.color }}
                   >
-                    <FormatCurrency value={row.hr.value} currency="NGN" />
+                    <FormatCurrency
+                      value={row.hr.value}
+                      currency="NGN"
+                      showFraction={false}
+                      compact
+                    />
                   </div>
                 ),
               },
@@ -388,7 +408,12 @@ function SalaryInsights() {
                     className={styles.color_label}
                     style={{ background: row.analyst.color }}
                   >
-                    <FormatCurrency value={row.analyst.value} currency="NGN" />
+                    <FormatCurrency
+                      value={row.analyst.value}
+                      currency="NGN"
+                      showFraction={false}
+                      compact
+                    />
                   </div>
                 ),
               },
@@ -401,7 +426,12 @@ function SalaryInsights() {
                     className={styles.color_label}
                     style={{ background: row.sales.color }}
                   >
-                    <FormatCurrency value={row.sales.value} currency="NGN" />
+                    <FormatCurrency
+                      value={row.sales.value}
+                      currency="NGN"
+                      showFraction={false}
+                      compact
+                    />
                   </div>
                 ),
               },
@@ -414,7 +444,12 @@ function SalaryInsights() {
                     className={styles.color_label}
                     style={{ background: row.finance.color }}
                   >
-                    <FormatCurrency value={row.finance.value} currency="NGN" />
+                    <FormatCurrency
+                      value={row.finance.value}
+                      currency="NGN"
+                      showFraction={false}
+                      compact
+                    />
                   </div>
                 ),
               },
@@ -427,7 +462,12 @@ function SalaryInsights() {
                     className={styles.color_label}
                     style={{ background: row.media.color }}
                   >
-                    <FormatCurrency value={row.media.value} currency="NGN" />
+                    <FormatCurrency
+                      value={row.media.value}
+                      currency="NGN"
+                      showFraction={false}
+                      compact
+                    />
                   </div>
                 ),
               },
@@ -503,7 +543,7 @@ function SalaryInsights() {
           <PayGap />
           <RecentSubmission />
         </section>
-        <CompanyProfileTraffic />
+        <TopContributors />
       </div>
     </PageLayout>
   );

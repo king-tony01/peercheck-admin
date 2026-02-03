@@ -151,7 +151,7 @@ function CustomLineChart({
           <XAxis
             dataKey={xAxisKey}
             tickLine={false}
-            axisLine={false}
+            axisLine
             tickMargin={10}
             tickFormatter={xAxisConfig.tickFormatter || formatCompactNumber}
             label={
@@ -166,7 +166,7 @@ function CustomLineChart({
           />
           <YAxis
             tickLine={false}
-            axisLine={false}
+            axisLine
             tickMargin={12}
             width={yAxisConfig.width || 40}
             tickFormatter={yAxisConfig.tickFormatter}

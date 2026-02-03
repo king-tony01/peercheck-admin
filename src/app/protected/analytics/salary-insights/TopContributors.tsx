@@ -7,8 +7,10 @@ import CompaniesIcon from "@/icons/CompaniesIcon";
 import ReviewsIcon from "@/icons/ReviewsIcon";
 import styles from "./styles/SalaryInsight.module.css";
 import UserIcon from "@/icons/UserIcon";
+import { useState } from "react";
 
-function CompanyProfileTraffic() {
+function TopContributors() {
+  const [activeTab, setActiveTab] = useState("top-roles");
   const getActivityIcon = (type: string) => {
     switch (type) {
       case "User":
@@ -155,31 +157,29 @@ function CompanyProfileTraffic() {
       avgDurationPerSession: "00hr:00min:00s",
     },
   ];
+
+  const tabs = [
+    { id: "top-roles", label: "Top Roles" },
+    { id: "top-companies", label: "Top Companies" },
+    { id: "top-industries", label: "Top Industries" },
+    { id: "top-regions", label: "Top Regions" },
+  ];
   return (
-    <section className={styles.company_profile_traffic}>
+    <section className={styles.top_contributors}>
       <div className={styles.header}>
-        <h2>company profile traffic</h2>
-        <div className={styles.controls}>
-          <SearchInput placeholder="Search..." />
-          <SmartFilter
-            onFilterChange={(filters) => {
-              console.log("Applied Filters:", filters);
-            }}
-          />
-          <DropdownInput
-            type="secondary"
-            options={[
-              {
-                label: "Last 7 days",
-                value: "7_days",
-              },
-              {
-                label: "Last 30 days",
-                value: "30_days",
-              },
-            ]}
-            position="bottom-right"
-          />
+        <h2>Top Contributors</h2>
+        <div className={styles.tabs}>
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              className={`${styles.tab_button} ${
+                activeTab === tab.id ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
       </div>
       <DynamicTable columns={DEFAULT_COLUMNS} data={DEFAULT_DATA} />
@@ -187,4 +187,4 @@ function CompanyProfileTraffic() {
   );
 }
 
-export default CompanyProfileTraffic;
+export default TopContributors;
