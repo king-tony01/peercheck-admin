@@ -1,7 +1,10 @@
-interface OverviewCard {
+interface MetricCard {
   title: string;
   value: string | number;
   icon: React.ReactNode;
+  type: "more" | "link";
+  path?: string;
+  options?: DropdownOption[];
   trend?: {
     direction: "up" | "down";
     percentage: number;

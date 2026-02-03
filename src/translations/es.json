@@ -1,0 +1,58 @@
+{
+  "login": {
+    "title": "Bienvenido de nuevo, Admin",
+    "subtitle": "Inicia sesión en tu cuenta de forma anónima",
+    "emailLabel": "Dirección de correo electrónico",
+    "emailPlaceholder": "Ingresa tu dirección de correo electrónico",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "rememberMe": "Recuérdame",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "loginButton": "Iniciar sesión",
+    "copyright": "© {year} Peercheck, Admin",
+    "noAccount": "¿No tienes cuenta?",
+    "signUp": "Regístrate aquí"
+  },
+  "verify": {
+    "title": "¡Hola! Revisa tu correo",
+    "subtitle": "Se te ha enviado una contraseña de un solo uso.",
+    "button": "VERIFICAR"
+  },
+  "analytics": {
+    "medianSalarySubmitted": "Salario Mediano Enviado",
+    "totalSalarySubmissions": "Total de Envíos de Salario",
+    "companiesWithSalaryData": "Empresas con Datos Salariales",
+    "rolesWithSalaryData": "Roles con Datos Salariales",
+    "salaryDistribution": "Distribución Salarial por Roles",
+    "industryRoleMatrix": "Matriz Salarial por Industria y Rol",
+    "entryLevel": "Nivel de Entrada",
+    "midLevel": "Nivel Medio",
+    "senior": "Senior",
+    "leadPrincipal": "Líder/Principal"
+  },
+  "navigation": {
+    "dashboard": "Panel de Control",
+    "analytics": "Análitica",
+    "companies": "Empresas",
+    "institutions": "Instituciones",
+    "reviews": "Reseñas",
+    "billing": "Facturación",
+    "team": "Equipo",
+    "settings": "Configuración"
+  },
+  "common": {
+    "exportData": "Exportar Datos",
+    "createReport": "Crear Informe",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia"
+  }
+}

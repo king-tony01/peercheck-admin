@@ -1,0 +1,108 @@
+.login {
+  width: 100%;
+  height: 100vh;
+  background: #ccfc54 url(/auth_bg.svg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  gap: 2rem;
+}
+.login .left {
+  flex: 1;
+  border-radius: 1.5rem;
+  background: #ffffff;
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
+.login .left .logo {
+  width: 5.5rem;
+  height: 1.7rem;
+}
+.login .left .center {
+  height: 100%;
+  margin: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.login .left .center h1 {
+  font-family: "Tanker";
+  font-weight: 500;
+  font-size: 1.8rem;
+  text-align: center;
+}
+.login .left .center p {
+  color: #5c5c5c;
+  font-weight: 500;
+}
+.login .left .center .actions {
+  min-width: 25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.login .left .bottom {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.login .left .bottom small {
+  color: #5c5c5c;
+  font-size: 0.9rem;
+}
+.login .right {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
+.login .right .q_card {
+  max-width: 30rem;
+  transition: all 0.3s ease;
+}
+.login .right .q_card p {
+  font-size: 1.5rem;
+  height: 8rem;
+  font-weight: 500;
+}
+.login .right .q_card small {
+  display: block;
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.login .right .wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem;
+}
+.login .right .wrapper .dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.login .right .wrapper .dots .dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #acd740;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+.login .right .wrapper .dots .dot.active {
+  background: #131313;
+  width: 2.5rem;
+  border-radius: 0.5rem;
+}/*# sourceMappingURL=Login.module.css.map */

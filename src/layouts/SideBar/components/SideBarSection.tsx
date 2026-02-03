@@ -1,6 +1,7 @@
 import ChevronRight from "@/icons/ChevronRight";
 import Link from "next/link";
 import styles from "../styles/SideBar.module.css";
+import ChevronDown from "@/icons/ChevronDown";
 
 function SideBarSection({
   sectionTitle,
@@ -11,14 +12,18 @@ function SideBarSection({
     <section className={styles.side_bar_section}>
       <p className={styles.title}>{sectionTitle}</p>
       <ul>
-        {items.map(({ title, path, icon }) => {
+        {items.map(({ title, path, icon, children }) => {
           const isActive = currentPath === path;
+          const hasActiveChild = children?.some(
+            (child) => currentPath === child.path,
+          );
+          const shouldShowChildren = isActive || hasActiveChild;
           return (
             <li key={path}>
               <Link href={path}>
                 <div
                   style={
-                    isActive
+                    isActive || hasActiveChild
                       ? ({
                           "--active-color": "#708B2E",
                         } as React.CSSProperties)
@@ -30,7 +35,7 @@ function SideBarSection({
                     style={
                       isActive
                         ? ({
-                            fontWeight: "600",
+                            fontWeight: "500",
                           } as React.CSSProperties)
                         : {}
                     }
@@ -38,8 +43,29 @@ function SideBarSection({
                     {title}
                   </span>
                 </div>
-                <ChevronRight />
+                {shouldShowChildren && children ? (
+                  <ChevronDown />
+                ) : (
+                  <ChevronRight />
+                )}
               </Link>
+              {children && shouldShowChildren && (
+                <ul className={styles.child_list}>
+                  {children.map((child) => {
+                    const childActive = currentPath === child.path;
+                    return (
+                      <li key={child.path}>
+                        <Link
+                          href={child.path}
+                          className={`${styles.child} ${childActive ? styles.active : ""}`}
+                        >
+                          <span>{child.title}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </li>
           );
         })}

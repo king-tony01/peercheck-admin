@@ -243,6 +243,7 @@ function DynamicTable({ columns, data, itemsPerPage = 7 }: DynamicTableProps) {
               { label: "50 / page", value: "50" },
             ]}
             onSelect={(opt) => setPerPage(Number(opt.value))}
+            position="top-right"
           />
         </div>
       </div>

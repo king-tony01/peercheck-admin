@@ -12,7 +12,7 @@
 .top_bar .top_bar_right {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 .top_bar .top_bar_right .action_btn {
   display: flex;

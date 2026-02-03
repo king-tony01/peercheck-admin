@@ -1,0 +1,19 @@
+.page_layout {
+  width: 100%;
+}
+.page_layout .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.page_layout .header_left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.page_layout .header_right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}/*# sourceMappingURL=PageLayout.module.css.map */

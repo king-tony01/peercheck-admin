@@ -1,9 +1,10 @@
 .side_bar_section {
-  margin: 1.5rem 0;
+  margin: 2rem 0;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
+  flex: 1;
 }
 .side_bar_section .title {
   font-size: 0.875rem;
@@ -23,7 +24,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0;
+  padding: 0.7rem 0;
   width: 100%;
   font-size: 1rem;
   color: #737373;
@@ -40,11 +41,32 @@
 .side_bar_section ul li a div {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.7rem;
 }
 .side_bar_section ul li a div span {
   display: block;
   color: var(--active-color);
+}
+.side_bar_section ul li .child_list {
+  padding-left: 1.5rem;
+}
+.side_bar_section ul li .child_list .child {
+  padding: 0.7rem 1rem;
+}
+.side_bar_section ul li .child_list .child.active {
+  border-radius: 0.5rem;
+  background: #e8feb0;
+  position: relative;
+  overflow: hidden;
+}
+.side_bar_section ul li .child_list .child.active::before {
+  content: "";
+  height: 100%;
+  width: 0.3rem;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  background: #708b2e;
 }
 
 .side_bar {
@@ -53,7 +75,7 @@
   padding: 1rem;
 }
 .side_bar .logo_container {
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 .side_bar .logo_container img {
   display: block;

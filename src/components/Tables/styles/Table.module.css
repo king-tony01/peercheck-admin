@@ -24,7 +24,6 @@
 .header_cell {
   display: flex;
   align-items: center;
-  gap: 8px;
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -44,7 +43,6 @@
 
 .checkbox_cell {
   width: 40px;
-  padding-left: 1rem !important;
 }
 
 .actions_cell {

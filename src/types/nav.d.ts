@@ -2,6 +2,12 @@ interface NavItem {
   title: string;
   path: string;
   icon: React.ReactNode;
+  children?: NavItemChild[];
+}
+
+interface NavItemChild {
+  title: string;
+  path: string;
 }
 
 interface NavSection {

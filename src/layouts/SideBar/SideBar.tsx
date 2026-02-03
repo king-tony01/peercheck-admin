@@ -30,7 +30,25 @@ function SideBar() {
         {
           title: "Analytics",
           icon: <AnalyticsIcon />,
-          path: ROUTE_PATHS.ADMIN_ANALYTICS,
+          path: ROUTE_PATHS.ADMIN_ANALYTICS.USER_INSIGHTS,
+          children: [
+            {
+              title: "User Insights",
+              path: ROUTE_PATHS.ADMIN_ANALYTICS.USER_INSIGHTS,
+            },
+            {
+              title: "Company Insights",
+              path: ROUTE_PATHS.ADMIN_ANALYTICS.COMPANY_INSIGHTS,
+            },
+            {
+              title: "Salary Insights",
+              path: ROUTE_PATHS.ADMIN_ANALYTICS.SALARY_INSIGHTS,
+            },
+            {
+              title: "Review Trends",
+              path: ROUTE_PATHS.ADMIN_ANALYTICS.REVIEW_TRENDS,
+            },
+          ],
         },
         {
           title: "Companies",

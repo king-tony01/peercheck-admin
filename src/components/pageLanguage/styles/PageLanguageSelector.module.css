@@ -1,0 +1,118 @@
+.pg_lang_wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: -moz-fit-content;
+  width: fit-content;
+  cursor: pointer;
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s ease;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.pg_lang_wrapper:hover {
+  background: #f9fafb;
+}
+.pg_lang_wrapper.open {
+  background: #f3f4f6;
+}
+.pg_lang_wrapper.open svg:last-child {
+  transform: rotate(180deg);
+}
+.pg_lang_wrapper svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.pg_lang_wrapper svg:first-child {
+  color: #6b7280;
+}
+.pg_lang_wrapper svg:last-child {
+  color: #9ca3af;
+}
+.pg_lang_wrapper span {
+  font-size: 0.9rem;
+  color: #111827;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.pg_lang_wrapper .languages {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  min-width: 12rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  z-index: 1000;
+  animation: slideDown 0.2s ease;
+}
+.pg_lang_wrapper .languages.bottom_left {
+  top: calc(100% + 0.5rem);
+  left: 0;
+}
+.pg_lang_wrapper .languages.bottom_right {
+  top: calc(100% + 0.5rem);
+  right: 0;
+  left: auto;
+}
+.pg_lang_wrapper .languages.top_left {
+  bottom: calc(100% + 0.5rem);
+  top: auto;
+  left: 0;
+}
+.pg_lang_wrapper .languages.top_right {
+  bottom: calc(100% + 0.5rem);
+  top: auto;
+  right: 0;
+  left: auto;
+}
+.pg_lang_wrapper .languages .language {
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.15s ease;
+}
+.pg_lang_wrapper .languages .language:hover {
+  background: #f3f4f6;
+}
+.pg_lang_wrapper .languages .language.active {
+  background: #eff6ff;
+  color: #708b2e;
+}
+.pg_lang_wrapper .languages .language.active .language_label {
+  font-weight: 600;
+  color: #708b2e;
+}
+.pg_lang_wrapper .languages .language.active .language_native {
+  color: #708b2e;
+}
+.pg_lang_wrapper .languages .language .language_label {
+  font-size: 0.9rem;
+  color: #111827;
+  font-weight: 500;
+}
+.pg_lang_wrapper .languages .language .language_native {
+  font-size: 0.85rem;
+  color: #7a7e70;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}/*# sourceMappingURL=PageLanguageSelector.module.css.map */

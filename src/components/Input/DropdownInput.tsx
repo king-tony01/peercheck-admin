@@ -10,6 +10,8 @@ function DropdownInput({
   type,
   position = "bottom-left",
 }: DropdownInputProps) {
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(selectedOption ?? options[0]);
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -18,8 +20,28 @@ function DropdownInput({
     setIsOpen(false);
     setSelected(option);
   };
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("click", handleClickOutside);
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }
+  }, [isOpen]);
+
   return (
     <div
+      ref={dropdownRef}
       onClick={toggleDropdown}
       className={`${styles.dropdown_input} ${styles[type]}`}
       data-type={type}
@@ -31,8 +53,8 @@ function DropdownInput({
           className={styles.options}
           style={
             {
-              "--top": position.includes("top") ? "100%" : "auto",
-              "--bottom": position.includes("bottom") ? "100%" : "auto",
+              "--top": position.includes("bottom") ? "110%" : "auto",
+              "--bottom": position.includes("top") ? "110%" : "auto",
               "--left": position.includes("left") ? "0" : "auto",
               "--right": position.includes("right") ? "0" : "auto",
             } as React.CSSProperties

@@ -8,8 +8,10 @@ function ActionDropdown({
   clickedChild,
   onChildClick,
   type,
+  customIcon,
   position = "top-right",
 }: ActionDropdownProps) {
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
   const [clicked, setClicked] = React.useState(clickedChild ?? options[0]);
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -18,13 +20,32 @@ function ActionDropdown({
     setIsOpen(false);
     setClicked(option);
   };
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) {
+      document.addEventListener("click", handleClickOutside);
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }
+  }, [isOpen]);
+
   return (
     <div
+      ref={dropdownRef}
       onClick={toggleDropdown}
       className={`${styles.action_dropdown} ${styles[type]}`}
       data-type={type}
     >
-      <EllipsisVerticalIcon />
+      {customIcon || <EllipsisVerticalIcon />}
       {isOpen && (
         <div
           className={styles.options}
@@ -40,7 +61,10 @@ function ActionDropdown({
           {options.map((option) => (
             <div
               key={option.value}
-              onClick={() => handleOptionSelect(option)}
+              onClick={() => {
+                handleOptionSelect(option);
+                option.onClick && option.onClick();
+              }}
               className={styles.option}
             >
               {option.icon}

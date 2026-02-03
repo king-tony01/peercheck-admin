@@ -6,14 +6,18 @@ function Button({
   disabled,
   children,
   onClick,
+  overrideStyles,
   ...props
 }: ButtonProps) {
   return (
     <button
-      className={`${styles[variant as string]} ${styles[size]}`}
+      className={`${styles[variant as string]} ${styles[size]} ${
+        disabled ? styles.disabled : ""
+      }`}
       disabled={disabled}
       onClick={onClick}
       {...props}
+      style={overrideStyles}
     >
       {children}
     </button>

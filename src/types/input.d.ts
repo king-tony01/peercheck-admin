@@ -7,6 +7,7 @@ interface DropdownOption {
   label: string;
   value: string;
   icon?: React.ReactNode;
+  onClick?: () => void;
 }
 
 interface DropdownInputProps {
@@ -40,4 +41,35 @@ interface ActionDropdownProps {
     | "bottom-left"
     | "bottom-right"
     | "bottom-center";
+  customIcon?: React.ReactNode;
+}
+
+interface TextInputProps {
+  value?: string;
+  placeholder?: string;
+  onChange?: (value: string) => void;
+  type?: "text" | "password" | "email" | "number";
+  disabled?: boolean;
+  readOnly?: boolean;
+  maxLength?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  prefixIcon?: React.ReactNode;
+  suffixIcon?: React.ReactNode;
+  error?: string;
+  warning?: string;
+  label?: string;
+  helperText?: string;
+}
+
+interface OTPInputProps {
+  length?: number;
+  value?: string;
+  onChange?: (value: string) => void;
+  autoFocus?: boolean;
+  disabled?: boolean;
+  className?: string;
+  inputClassName?: string;
+  error?: string;
+  helperText?: string;
 }

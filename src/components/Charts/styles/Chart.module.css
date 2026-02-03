@@ -1,0 +1,128 @@
+.chart {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  font-family: "Tanker";
+}
+
+.title_with_subtitle {
+  margin-bottom: 0.2rem;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: #6b6b6b;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.legend_item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend_dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend_label {
+  font-size: 13px;
+  color: #666;
+}
+
+.tooltip {
+  background: #f5ffed;
+  border: 1px solid #9ce94c;
+  border-radius: 12px;
+  padding: 10px 12px;
+  box-shadow: 0 10px 30px rgba(155, 218, 73, 0.25);
+  color: #3a4a17;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.list_container {
+  width: 100%;
+  margin-top: 1rem;
+}
+.list_container .list_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+.list_container .list_item .list_label {
+  color: #868d9b;
+}
+.list_container .list_item .item_value {
+  font-weight: 500;
+  color: #000;
+}
+
+.pie_container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.pie_legend {
+  flex: 1;
+}
+
+.pie_legend_item {
+  margin: 1rem 0;
+}
+
+.pie_legend_dot {
+  width: 0.3rem;
+  height: 1rem;
+  border-radius: 1rem;
+  flex-shrink: 0;
+}
+
+.pie_legend_content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+.pie_legend_label {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 600;
+}
+
+.pie_legend_value {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #666;
+}
+
+.line_legend {
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2.5rem;
+}/*# sourceMappingURL=Chart.module.css.map */

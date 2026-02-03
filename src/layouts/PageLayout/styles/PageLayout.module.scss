@@ -1,0 +1,22 @@
+.page_layout {
+  width: 100%;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    &_left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    &_right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+}

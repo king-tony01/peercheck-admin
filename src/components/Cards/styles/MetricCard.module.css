@@ -1,0 +1,51 @@
+.metric_card {
+  position: relative;
+  padding: 1rem;
+  flex: 1;
+  border: 0.1rem solid #eaeaea;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.metric_card .top {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.metric_card .top .title {
+  font-size: 0.9rem;
+  color: #737373;
+  font-weight: 500;
+}
+.metric_card .top svg {
+  width: 1.5rem;
+}
+.metric_card .value_section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.metric_card .value_section h2 {
+  font-size: 2.5rem;
+  font-weight: 500;
+  font-family: "Tanker";
+}
+.metric_card .action_btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f6f8fa;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+.metric_card .action_btn_drop {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}/*# sourceMappingURL=MetricCard.module.css.map */

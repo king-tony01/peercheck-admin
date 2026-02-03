@@ -3,4 +3,5 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "small" | "medium" | "large";
   disabled?: boolean;
   loading?: boolean;
+  overrideStyles?: React.CSSProperties;
 }
