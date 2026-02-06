@@ -1,3 +1,4 @@
+"use client";
 import Button from "@/components/Button/Button";
 import DropdownInput from "@/components/Input/DropdownInput";
 import ClipBoardIcon from "@/icons/ClipBoardIcon";
@@ -12,14 +13,50 @@ import MetricCard from "@/components/Cards/MetricCard";
 import CustomBarChart from "@/components/Charts/BarChart";
 import ListChart from "@/components/Charts/ListChart";
 import CustomPieChart from "@/components/Charts/CustomPieChart";
+import useFetch from "@/hooks/useFetch";
+import { API_ROUTES } from "@/routes/apiRoutes";
+import { useToast } from "@/components/Toast/ToastProvider";
 
 function UserInsights() {
+  const { showToast } = useToast();
+  const {
+    data: userInsightsData,
+    isLoading,
+    isError,
+  } = useFetch<UserInsightsData>(API_ROUTES.ANALYTICS_USERS_INSIGHTS, {
+    onError: (error) => {
+      console.error("Analytics user insights error:", error);
+      showToast("Unable to load user insights.", {
+        type: "error",
+        description: error.message,
+      });
+    },
+  });
+
+  const hasError = isError;
+  const showMetrics = !isLoading && !hasError;
+
+  const formatChangeLabel = (value?: number) => {
+    const safeValue = Number(value ?? 0);
+    const prefix = safeValue > 0 ? "+" : "";
+    return `${prefix}${safeValue}`;
+  };
+
+  const getChipColor = (value?: number): "green" | "red" =>
+    Number(value ?? 0) >= 0 ? "green" : "red";
+
   const overviewCards: MetricCard[] = [
     {
       title: "Total Users",
-      value: 36681,
+      value: hasError ? "N/A" : (userInsightsData?.totalUsers?.count ?? 0),
       icon: <UsersIcon />,
-      chip: { label: "+312", color: "green" },
+      chip: showMetrics
+        ? {
+            label: formatChangeLabel(userInsightsData?.totalUsers?.change),
+            color: getChipColor(userInsightsData?.totalUsers?.change),
+          }
+        : undefined,
+      isLoading,
       type: "more",
       options: [
         {
@@ -30,84 +67,72 @@ function UserInsights() {
     },
     {
       title: "New Users",
-      value: 1214,
+      value: hasError ? "N/A" : (userInsightsData?.newUsers?.count ?? 0),
       icon: <UsersIcon />,
-      chip: { label: "+312", color: "green" },
+      chip: showMetrics
+        ? {
+            label: formatChangeLabel(userInsightsData?.newUsers?.change),
+            color: getChipColor(userInsightsData?.newUsers?.change),
+          }
+        : undefined,
+      isLoading,
       type: "more",
       options: [],
     },
     {
       title: "Avg Session Duration",
-      value: 124580,
+      value: hasError
+        ? "N/A"
+        : userInsightsData?.avgSessionDuration
+          ? `${userInsightsData.avgSessionDuration.duration} ${userInsightsData.avgSessionDuration.unit}`
+          : 0,
       icon: <UsersIcon />,
-      trend: { direction: "down", percentage: 13.5 },
+      isLoading,
       type: "more",
       options: [],
     },
     {
       title: "Top City",
-      value: "Lagos, NG",
+      value: hasError
+        ? "N/A"
+        : userInsightsData?.topCity
+          ? `${userInsightsData.topCity.city}, ${userInsightsData.topCity.country}`
+          : "",
       icon: <ReviewsIcon />,
+      isLoading,
       type: "more",
       options: [],
     },
   ];
 
-  const engagementData = [
-    { month: "Jan", users: 0, reviews: 0 },
-    { month: "Feb", users: 3200, reviews: 2800 },
-    { month: "Mar", users: 2600, reviews: 2900 },
-    { month: "Apr", users: 1800, reviews: 2100 },
-    { month: "May", users: 3400, reviews: 3100 },
-    {
-      month: "Jun",
-      users: 6400,
-      reviews: 6000,
-      highlight: "June 2025 - 3,420 active users",
-    },
-    { month: "Jul", users: 5200, reviews: 5400 },
-    { month: "Aug", users: 4600, reviews: 5000 },
-    { month: "Sep", users: 5200, reviews: 5600 },
-    { month: "Oct", users: 8600, reviews: 9200 },
-    { month: "Nov", users: 9100, reviews: 10200 },
-    { month: "Dec", users: 8800, reviews: 9400 },
-  ];
+  const userGrowthData =
+    userInsightsData?.userGrowth.map((item) => ({
+      category: item.month,
+      value: item.count,
+      color: "#E5EBF0",
+    })) ?? [];
 
-  const reviewCategoryData = [
-    { category: "Salary", value: 4200, color: "#E5EBF0" },
-    { category: "Institutions", value: 3100, color: "#E5EBF0" },
-    { category: "Culture", value: 6200, color: "#E5EBF0" },
-    { category: "Interview", value: 200, color: "#E5EBF0" },
-    { category: "Interview", value: 2400, color: "#E5EBF0" },
-    { category: "Interview", value: 3000, color: "#E5EBF0" },
-    { category: "Interview", value: 4400, color: "#E5EBF0" },
-    { category: "Interview", value: 9400, color: "#E5EBF0" },
-    { category: "Interview", value: 10400, color: "#E5EBF0" },
-    { category: "Interview", value: 12400, color: "#E5EBF0" },
-    { category: "Interview", value: 2400, color: "#E5EBF0" },
-    { category: "Interview", value: 5400, color: "#E5EBF0" },
-  ];
+  const topCities =
+    userInsightsData?.topCities.map((city) => ({
+      label: city.city,
+      value: city.count,
+    })) || [];
 
-  const topCities = [
-    { label: "Lagos", value: 1234567 },
-    { label: "Capetown", value: 234567 },
-    { label: "Nairobi", value: 345678 },
-    { label: "Addis Ababa", value: 456789 },
-    { label: "Port-Harcourt", value: 567890 },
-    { label: "Abuja", value: 678901 },
-    { label: "Accra", value: 34567 },
-    { label: "Pretoria", value: 789012 },
-    { label: "Cairo", value: 890123 },
-    { label: "Abidjan", value: 901234 },
-  ];
+  const pieColors = ["#FF9F0A", "#54CFE9", "#D5A1FD", "#ED62C5", "#38C793"];
 
-  const topRolesData = [
-    { name: "Software Engineer", value: 54071, color: "#FFA726" },
-    { name: "Data Analyst", value: 32210, color: "#4FC3F7" },
-    { name: "Cybersecurity Analyst", value: 24410, color: "#BA68C8" },
-    { name: "Product Designer", value: 15250, color: "#E91E63" },
-    { name: "Customer Success Manager", value: 11500, color: "#66BB6A" },
-  ];
+  const topRolesData =
+    userInsightsData?.topRoles.map((role, index) => ({
+      name: role.name,
+      value: role.count,
+      color: pieColors[index % pieColors.length],
+    })) ?? [];
+
+  const topIndustriesData =
+    userInsightsData?.topIndustries.map((industry, index) => ({
+      name: industry.name,
+      value: industry.count,
+      color: pieColors[index % pieColors.length],
+    })) ?? [];
 
   return (
     <PageLayout
@@ -154,15 +179,15 @@ function UserInsights() {
             <CustomBarChart
               title="User growth"
               subtitle="User Acquisition Overview"
-              data={reviewCategoryData}
+              data={userGrowthData}
               showCartesian
               showYAxis
             />
           </div>
           <div className={styles.chart}>
             <ListChart
-              title="Total Reviews"
-              subtitle="By categories"
+              title="Top 10 cities"
+              subtitle="By user distribution"
               data={topCities}
             />
           </div>
@@ -180,7 +205,7 @@ function UserInsights() {
             <CustomPieChart
               title="Top industries"
               subtitle="By user distribution"
-              data={topRolesData}
+              data={topIndustriesData}
             />
           </div>
         </section>

@@ -16,19 +16,33 @@ import InstitutionsIcon from "@/icons/InstitutionsIcon";
 import UsersIcon from "@/icons/UsersIcon";
 import ReviewsIcon from "@/icons/ReviewsIcon";
 import MetricCard from "@/components/Cards/MetricCard";
+import { useToast } from "@/components/Toast/ToastProvider";
 
 function Dashboard() {
-  const { data: overviewData } = useFetch<OverviewMetricCards>(
-    API_ROUTES.DASHBOARD_OVERVIEW,
-    {
-      onSuccess: (data) => {
-        console.log("Dashboard overview response:", data);
-      },
-      onError: (error) => {
-        console.error("Dashboard overview error:", error);
-      },
+  const { showToast } = useToast();
+  const {
+    data: overviewData,
+    isLoading,
+    isError,
+  } = useFetch<OverviewMetricCards>(API_ROUTES.DASHBOARD_OVERVIEW, {
+    onError: (error) => {
+      console.error("Dashboard overview error:", error);
+      showToast("Unable to load dashboard overview.", {
+        type: "error",
+        description: error.message,
+      });
     },
-  );
+  });
+
+  useFetch(API_ROUTES.DASHBOARD_USER_ENGAGEMENT_CHART, {
+    onError: (error) => {
+      console.error("Dashboard user engagement error:", error);
+      showToast("Unable to load user engagement chart.", {
+        type: "warning",
+        description: error.message,
+      });
+    },
+  });
 
   const formatChangeLabel = (value?: number) => {
     const safeValue = Number(value ?? 0);
@@ -39,51 +53,71 @@ function Dashboard() {
   const getChipColor = (value?: number): "green" | "red" =>
     Number(value ?? 0) >= 0 ? "green" : "red";
 
+  const hasError = isError;
+  const showMetrics = !isLoading && !hasError;
+
   const overviewCards: MetricCard[] = [
     {
       title: "All Companies",
-      value: overviewData?.allCompanies?.count ?? 0,
+      value: hasError ? "N/A" : (overviewData?.allCompanies?.count ?? 0),
       icon: <CompaniesIcon />,
-      chip: {
-        label: formatChangeLabel(overviewData?.allCompanies?.change),
-        color: getChipColor(overviewData?.allCompanies?.change),
-      },
+      chip: showMetrics
+        ? {
+            label: formatChangeLabel(overviewData?.allCompanies?.change),
+            color: getChipColor(overviewData?.allCompanies?.change),
+          }
+        : undefined,
+      isLoading,
       type: "link",
       path: "/admin/companies",
     },
     {
       title: "All Institutions",
-      value: overviewData?.allInstitutions?.count ?? 0,
+      value: hasError ? "N/A" : (overviewData?.allInstitutions?.count ?? 0),
       icon: <InstitutionsIcon />,
-      chip: {
-        label: formatChangeLabel(overviewData?.allInstitutions?.change),
-        color: getChipColor(overviewData?.allInstitutions?.change),
-      },
+      chip: showMetrics
+        ? {
+            label: formatChangeLabel(overviewData?.allInstitutions?.change),
+            color: getChipColor(overviewData?.allInstitutions?.change),
+          }
+        : undefined,
+      isLoading,
       type: "link",
       path: "/admin/institutions",
     },
     {
       title: "Total Users",
-      value: overviewData?.totalUsers?.count ?? 0,
+      value: hasError ? "N/A" : (overviewData?.totalUsers?.count ?? 0),
       icon: <UsersIcon />,
-      trend: {
-        direction: (overviewData?.totalUsers?.change ?? 0) >= 0 ? "up" : "down",
-        percentage: Math.abs(overviewData?.totalUsers?.change ?? 0),
-      },
+      trend: showMetrics
+        ? {
+            direction:
+              (overviewData?.totalUsers?.change ?? 0) >= 0 ? "up" : "down",
+            percentage: Math.abs(overviewData?.totalUsers?.change ?? 0),
+          }
+        : undefined,
+      isLoading,
       type: "link",
       path: "/admin/analytics/user-insights",
     },
     {
       title: "Total Reviews Submitted",
-      value: overviewData?.totalReviewsSubmitted?.count ?? 0,
+      value: hasError
+        ? "N/A"
+        : (overviewData?.totalReviewsSubmitted?.count ?? 0),
       icon: <ReviewsIcon />,
-      trend: {
-        direction:
-          (overviewData?.totalReviewsSubmitted?.change ?? 0) >= 0
-            ? "up"
-            : "down",
-        percentage: Math.abs(overviewData?.totalReviewsSubmitted?.change ?? 0),
-      },
+      trend: showMetrics
+        ? {
+            direction:
+              (overviewData?.totalReviewsSubmitted?.change ?? 0) >= 0
+                ? "up"
+                : "down",
+            percentage: Math.abs(
+              overviewData?.totalReviewsSubmitted?.change ?? 0,
+            ),
+          }
+        : undefined,
+      isLoading,
       type: "link",
       path: "/admin/reviews",
     },

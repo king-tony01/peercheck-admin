@@ -5,6 +5,7 @@ interface MetricCard {
   type: "more" | "link";
   path?: string;
   options?: DropdownOption[];
+  isLoading?: boolean;
   trend?: {
     direction: "up" | "down";
     percentage: number;
