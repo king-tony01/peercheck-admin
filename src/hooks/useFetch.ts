@@ -1,6 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/Toast/ToastProvider";
+import { ROUTE_PATHS } from "@/routes/routePaths";
 
 export const useFetch = <T = unknown>(
   endpoint: string | null,
@@ -26,6 +29,8 @@ export const useFetch = <T = unknown>(
   const [isLoading, setIsLoading] = useState(false);
 
   const abortRef = useRef<AbortController | null>(null);
+  const router = useRouter();
+  const { showToast } = useToast();
 
   const fetchData = useCallback(async () => {
     if (!endpoint || !enabled) return null;
@@ -81,7 +86,12 @@ export const useFetch = <T = unknown>(
         if (res.status === 204) {
           result = null as unknown as T;
         } else if (contentType.includes("application/json")) {
-          result = await res.json();
+          const payload = await res.json();
+          result = (
+            payload && typeof payload === "object" && "data" in payload
+              ? payload.data
+              : payload
+          ) as T;
         } else {
           result = (await res.text()) as unknown as T;
         }
@@ -99,6 +109,16 @@ export const useFetch = <T = unknown>(
       setError(apiError);
       setStatus(apiError.status ?? null);
       onError?.(apiError);
+      if (apiError.status === 401) {
+        showToast(apiError.message || "Session expired.", {
+          type: "warning",
+        });
+        router.push(ROUTE_PATHS.ADMIN_LOGIN);
+      } else {
+        showToast(apiError.message || "Request failed.", {
+          type: apiError.status && apiError.status >= 500 ? "error" : "warning",
+        });
+      }
       return null;
     } finally {
       setIsLoading(false);

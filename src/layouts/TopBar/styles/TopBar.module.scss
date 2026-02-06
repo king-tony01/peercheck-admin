@@ -20,6 +20,46 @@
       align-items: center;
       gap: 0.5rem;
       cursor: pointer;
+      position: relative;
+
+      .dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 15rem;
+        background: #ffffff;
+        border: 0.1rem solid var(--border-color, #eaeaea);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        z-index: 1000;
+
+        button {
+          background: none;
+          border: 0.1rem solid #708b2e;
+          color: var(--primary-color, #708b2e);
+          width: 100%;
+          cursor: pointer;
+          padding: 0.7rem;
+          border-radius: 0.5rem;
+
+          &:hover {
+            background: #708b2e;
+            color: #ffffff;
+          }
+
+          &:disabled {
+            background: #eaeaea;
+            border-color: #eaeaea;
+            color: #a0a0a0;
+            cursor: not-allowed;
+          }
+        }
+      }
     }
   }
 }
