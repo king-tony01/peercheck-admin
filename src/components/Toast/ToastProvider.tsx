@@ -90,12 +90,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={toast.id}
             className={`${styles.toast} ${styles[toast.type]}`}
-            style={{
-              // @ts-expect-error CSS variables
-              "--toast-duration": `${toast.duration}ms`,
-              // @ts-expect-error CSS variables
-              "--toast-accent": toastAccent[toast.type],
-            }}
+            style={
+              {
+                "--toast-duration": `${toast.duration}ms`,
+                "--toast-accent": toastAccent[toast.type],
+              } as React.CSSProperties
+            }
             onClick={() => removeToast(toast.id)}
           >
             <span className={styles.icon}>{toastIcon[toast.type]}</span>

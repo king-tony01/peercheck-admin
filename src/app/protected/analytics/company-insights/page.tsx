@@ -26,6 +26,17 @@ function CompanyInsights() {
     },
   });
   console.log("Company insights data:", companyInsightsData);
+
+  const {
+    data: sampleCompaniesData,
+    isLoading: isSampleCompaniesLoading,
+    isError: isSampleCompaniesError,
+  } = useFetch(API_ROUTES.SAMPLE_COMPANIES, {
+    onError: (error) => {
+      console.error("Dashboard companies engagement error:", error);
+    },
+  });
+  console.log("Company insights data:", sampleCompaniesData);
   const overviewCards: MetricCard[] = [
     {
       title: "Total Companies Indexed",

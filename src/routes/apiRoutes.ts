@@ -4,8 +4,8 @@ export const BACKEND_ROUTES = {
   DASHBOARD_USER_ENGAGEMENT_CHART: "/statistics/dashboard/user-engagement",
   ANALYTICS_COMPANY_INSIGHTS: "/statistics/company-analytics",
   ANALYTICS_USERS_INSIGHTS: "/statistics/user-analytics",
-  SUBMIT_REPORT: "/api/reports/submit",
-  GET_SETTINGS: "/api/settings",
+  LOGOUT_ADMIN: "/auth/logout",
+  SAMPLE_COMPANIES: "/companies",
   UPDATE_SETTINGS: "/api/settings/update",
 } as const;
 
@@ -15,7 +15,7 @@ export const API_ROUTES = {
   DASHBOARD_USER_ENGAGEMENT_CHART: "/api/dashboard/user-engagement-chart",
   ANALYTICS_COMPANY_INSIGHTS: "/api/analytics/company-insights",
   ANALYTICS_USERS_INSIGHTS: "/api/analytics/user-insights",
-  SUBMIT_REPORT: "/api/reports/submit",
-  GET_SETTINGS: "/api/settings",
+  LOGOUT_ADMIN: "/api/logout",
+  SAMPLE_COMPANIES: "/api/companies",
   UPDATE_SETTINGS: "/api/settings/update",
 } as const;
