@@ -35,7 +35,7 @@ function TopBar() {
   return (
     <section className={styles.top_bar}>
       <div className={styles.top_bar_left}>
-        <button onClick={toggleOpen}>
+        <button onClick={toggleOpen} className={styles.hamburger_btn}>
           <HamburgerIcon />
         </button>
         <h1>Welcome Back, Alex</h1>

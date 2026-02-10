@@ -28,6 +28,19 @@ export function CustomNavigationProvider({
     }
   }, [pathname]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setOpen(window.innerWidth >= 601);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const toggleOpen = () => {
     setOpen((prev) => !prev);
   };

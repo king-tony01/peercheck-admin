@@ -19,6 +19,17 @@
   align-items: center;
   gap: 1rem;
 }
+.top_bar .top_bar_left .hamburger_btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+@media screen and (max-width: 600px) {
+  .top_bar .top_bar_left .hamburger_btn {
+    display: block;
+  }
+}
 .top_bar .top_bar_right {
   display: flex;
   align-items: center;
