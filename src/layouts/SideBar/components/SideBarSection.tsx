@@ -28,7 +28,7 @@ function SideBarSection({
               <Link
                 href={path}
                 onClick={
-                  shouldShowChildren && width < 768 ? toggleOpen : undefined
+                  shouldShowChildren && width <= 768 ? toggleOpen : undefined
                 }
               >
                 <div
@@ -68,7 +68,7 @@ function SideBarSection({
                         <Link
                           href={child.path}
                           className={`${styles.child} ${childActive ? styles.active : ""}`}
-                          onClick={width < 768 ? toggleOpen : undefined}
+                          onClick={width <= 768 ? toggleOpen : undefined}
                         >
                           <span>{child.title}</span>
                         </Link>

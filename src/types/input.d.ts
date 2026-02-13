@@ -1,6 +1,7 @@
 interface SearchInputProps {
   placeholder?: string;
   onChange?: (value: string) => void;
+  shrink?: boolean;
 }
 
 interface DropdownOption {

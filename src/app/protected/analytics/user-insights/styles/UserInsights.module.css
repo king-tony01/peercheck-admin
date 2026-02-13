@@ -84,16 +84,33 @@
   width: 100%;
   margin-bottom: 1rem;
 }
+@media screen and (max-width: 500px) {
+  .recent_activity .header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
 .recent_activity .header h2 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 500;
   font-family: "Tanker";
 }
+@media screen and (max-width: 500px) {
+  .recent_activity .header h2 {
+    width: 100%;
+  }
+}
 .recent_activity .header .controls {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+@media screen and (max-width: 500px) {
+  .recent_activity .header .controls {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 .recent_activity .activity_type {
   display: flex;
@@ -112,4 +129,20 @@
 }
 .recent_activity .activity_type .activity_icon svg {
   width: 1.5rem;
+}
+
+.mobile_activity_item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-direction: column;
+}
+.mobile_activity_item .first_row,
+.mobile_activity_item .second_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
 }/*# sourceMappingURL=UserInsights.module.css.map */

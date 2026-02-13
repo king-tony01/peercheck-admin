@@ -11,8 +11,11 @@ import ActionDropdown from "@/components/Input/ActionDropdown";
 import FormatStatus from "@/components/wrappers/FormatStatus";
 import UserIcon from "@/icons/UserIcon";
 import CheckBox from "@/components/Input/CheckBox";
+import { useWindow } from "@/hooks/useWindow";
+import MobileTable from "@/components/Tables/MobileTable";
 
 function RecentActivity({ recentActivityData }: { recentActivityData: any[] }) {
+  const { width } = useWindow();
   const getActivityIcon = (type: string) => {
     switch (type) {
       case "User":
@@ -130,7 +133,41 @@ function RecentActivity({ recentActivityData }: { recentActivityData: any[] }) {
           />
         </div>
       </div>
-      <DynamicTable columns={DEFAULT_COLUMNS} data={tableData} />
+      {width <= 768 ? (
+        <MobileTable
+          headerTitle="Description"
+          showCheckbox={true}
+          data={tableData.map((row) => ({
+            id: row.id,
+            content: (
+              <div className={styles.mobile_activity_item}>
+                <div className={styles.first_row}>
+                  <p>{row.description}</p>
+                  <ActionDropdown
+                    type="primary"
+                    options={[
+                      {
+                        label: "View Details",
+                        value: "view_details",
+                      },
+                      {
+                        label: "Edit Activity",
+                        value: "edit_activity",
+                      },
+                    ]}
+                  />
+                </div>
+                <div className={styles.second_row}>
+                  <FormatDate date={row.date} options={{ short: false }} />
+                  <FormatStatus status={row.status} />
+                </div>
+              </div>
+            ),
+          }))}
+        />
+      ) : (
+        <DynamicTable columns={DEFAULT_COLUMNS} data={tableData} />
+      )}
     </section>
   );
 }

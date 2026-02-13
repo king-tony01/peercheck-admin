@@ -28,3 +28,15 @@ interface DynamicTableProps {
   data: TableRow[];
   itemsPerPage?: number;
 }
+
+interface MobileTableRow {
+  id: string;
+  content: string | React.ReactNode;
+}
+
+interface MobileTableProps {
+  headerTitle: string;
+  data: MobileTableRow[];
+  showCheckbox?: boolean;
+  itemsPerPage?: number;
+}
