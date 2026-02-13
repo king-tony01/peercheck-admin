@@ -27,6 +27,9 @@ interface DynamicTableProps {
   columns: TableColumn[];
   data: TableRow[];
   itemsPerPage?: number;
+  isLoading?: boolean;
+  emptyTitle?: string;
+  emptyMessage?: string;
 }
 
 interface MobileTableRow {
@@ -39,4 +42,7 @@ interface MobileTableProps {
   data: MobileTableRow[];
   showCheckbox?: boolean;
   itemsPerPage?: number;
+  isLoading?: boolean;
+  emptyTitle?: string;
+  emptyMessage?: string;
 }

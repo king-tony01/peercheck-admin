@@ -14,6 +14,9 @@ interface MobileTableProps {
   data: MobileTableRow[];
   showCheckbox?: boolean;
   itemsPerPage?: number;
+  isLoading?: boolean;
+  emptyTitle?: string;
+  emptyMessage?: string;
 }
 
 function MobileTable({
@@ -21,6 +24,9 @@ function MobileTable({
   data,
   showCheckbox = false,
   itemsPerPage = 7,
+  isLoading = false,
+  emptyTitle = "No records yet",
+  emptyMessage = "Data will appear here once available",
 }: MobileTableProps) {
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
@@ -134,15 +140,24 @@ function MobileTable({
         <span className={styles.mobile_header_title}>{headerTitle}</span>
       </div>
       <div className={styles.mobile_body}>
-        {data.length === 0 ? (
+        {isLoading ? (
+          <div className={styles.loading_state}>
+            <div className={styles.spinner} />
+            <div className={styles.loading_text}>Loading data...</div>
+          </div>
+        ) : data.length === 0 ? (
           <div className={styles.empty_state}>
-            <div className={styles.empty_state_icon}>
-              <span className={styles.empty_state_dot} />
-            </div>
-            <div className={styles.empty_state_title}>No records yet</div>
-            <div className={styles.empty_state_text}>
-              New activity will appear here as it happens.
-            </div>
+            <svg className={styles.empty_icon} viewBox="0 0 24 24" fill="none">
+              <path
+                d="M9 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-2M9 2v2h6V2M9 2h6"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <div className={styles.empty_state_title}>{emptyTitle}</div>
+            <div className={styles.empty_state_text}>{emptyMessage}</div>
           </div>
         ) : (
           currentData.map((row) => (

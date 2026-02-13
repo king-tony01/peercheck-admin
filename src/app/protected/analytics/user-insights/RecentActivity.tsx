@@ -180,6 +180,8 @@ function RecentActivity() {
         <MobileTable
           headerTitle="Description"
           showCheckbox={true}
+          emptyTitle="No activity yet"
+          emptyMessage="Recent user activity will appear here"
           data={DEFAULT_DATA.map((row) => ({
             id: row.id,
             content: (
@@ -209,7 +211,12 @@ function RecentActivity() {
           }))}
         />
       ) : (
-        <DynamicTable columns={DEFAULT_COLUMNS} data={DEFAULT_DATA} />
+        <DynamicTable
+          columns={DEFAULT_COLUMNS}
+          data={DEFAULT_DATA}
+          emptyTitle="No activity yet"
+          emptyMessage="Recent user activity will appear here"
+        />
       )}
     </section>
   );
