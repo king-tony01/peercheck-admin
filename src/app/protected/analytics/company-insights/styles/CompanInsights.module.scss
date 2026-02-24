@@ -19,6 +19,7 @@
   margin: 2rem 0;
   display: grid;
   grid-template-columns: 3fr 1fr;
+  gap: 1rem;
 
   @media screen and (max-width: 768px) {
     display: block;
@@ -40,11 +41,22 @@
 
 .concern_section {
   border-radius: 1rem;
-  padding: 1.5rem;
+  padding: 0rem 1rem 1rem 1rem;
   background: #f6f8fa;
+  overflow: auto;
+  height: 73.5rem;
 
   @media screen and (max-width: 768px) {
     margin: 2rem 0;
+    height: unset;
+  }
+
+  h2 {
+    position: sticky;
+    top: 0;
+    background: #f6f8fa;
+    left: 0;
+    padding: 1rem 0;
   }
 }
 
@@ -54,6 +66,7 @@
   border: 0.12rem solid transparent;
   margin: 0.5rem 0;
 
+  &.critical,
   &.high {
     border-color: #ff383c24;
 

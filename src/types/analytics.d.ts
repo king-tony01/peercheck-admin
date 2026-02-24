@@ -77,3 +77,28 @@ interface AverageCompanyRating {
 interface MostReviewedCompany {
   name: string;
 }
+
+interface EmergencyConcernSignal {
+  id: string;
+  companyId: string;
+  companyName: string;
+  severity: string;
+  summary: string;
+  concernsCount: number;
+  reviewsAnalyzed: number;
+  metrics: ConserSignalMetrics;
+  analyzedAt: string;
+  trend: any;
+}
+interface ConserSignalMetrics {
+  review_count: number;
+  interview_review_count: number;
+  total_reviews: number;
+  current_avg_rating: any;
+  previous_avg_rating: any;
+  rating_change: any;
+  recommend_percentage?: number;
+  ceo_approval_percentage?: number;
+  positive_interview_percentage?: number;
+  time_window_days: number;
+}

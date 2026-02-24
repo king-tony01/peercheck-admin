@@ -19,6 +19,7 @@
   margin: 2rem 0;
   display: grid;
   grid-template-columns: 3fr 1fr;
+  gap: 1rem;
 }
 @media screen and (max-width: 768px) {
   .charts {
@@ -39,13 +40,23 @@
 
 .concern_section {
   border-radius: 1rem;
-  padding: 1.5rem;
+  padding: 0rem 1rem 1rem 1rem;
   background: #f6f8fa;
+  overflow: auto;
+  height: 73.5rem;
 }
 @media screen and (max-width: 768px) {
   .concern_section {
     margin: 2rem 0;
+    height: unset;
   }
+}
+.concern_section h2 {
+  position: sticky;
+  top: 0;
+  background: #f6f8fa;
+  left: 0;
+  padding: 1rem 0;
 }
 
 .concern_card {
@@ -54,10 +65,10 @@
   border: 0.12rem solid transparent;
   margin: 0.5rem 0;
 }
-.concern_card.high {
+.concern_card.critical, .concern_card.high {
   border-color: rgba(255, 56, 60, 0.1411764706);
 }
-.concern_card.high .concern_header {
+.concern_card.critical .concern_header, .concern_card.high .concern_header {
   background: rgba(255, 56, 60, 0.2);
   padding: 1rem;
   font-size: 1rem;
@@ -66,7 +77,7 @@
   align-items: center;
   gap: 0.5rem;
 }
-.concern_card.high .content {
+.concern_card.critical .content, .concern_card.high .content {
   background: rgba(255, 56, 60, 0.0509803922);
   padding: 1rem;
   color: #2a2a2a;

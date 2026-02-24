@@ -9,6 +9,7 @@ export const BACKEND_ROUTES = {
     "/companies/insights/company-coverage-depth",
   ANALYTICS_COMPANY_INSIGHTS_STATS: "/companies/insights/overview",
   ANALYTICS_USERS_INSIGHTS: "/statistics/user-analytics",
+  ANALYTICS_EMERGENCY_CONCERN_SIGNALS: "/insights/concern-signals/recents",
   DASHBOARD_RECENT_ACTIVITY: "/logs/recent",
   LOGOUT_ADMIN: "/auth/logout",
   SAMPLE_COMPANIES: "/companies",
@@ -27,6 +28,8 @@ export const API_ROUTES = {
     "/api/analytics/company-insights/coverage-depth-by-industry",
   ANALYTICS_COMPANY_INSIGHTS_STATS: "/api/analytics/company-insights/stats",
   ANALYTICS_USERS_INSIGHTS: "/api/analytics/user-insights",
+  ANALYTICS_EMERGENCY_CONCERN_SIGNALS:
+    "/api/analytics/company-insights/concern-signals",
   LOGOUT_ADMIN: "/api/logout",
   SAMPLE_COMPANIES: "/api/companies",
   UPDATE_SETTINGS: "/api/settings/update",
