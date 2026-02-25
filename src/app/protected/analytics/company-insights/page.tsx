@@ -56,6 +56,19 @@ function CompanyInsights() {
     },
   );
 
+  const {
+    data: concerSignalsData,
+    isLoading: isConcerSignalsLoading,
+    isError: isConcerSignalsError,
+  } = useFetch<EmergencyConcernSignal[]>(
+    API_ROUTES.ANALYTICS_EMERGENCY_CONCERN_SIGNALS,
+    {
+      onError: (error) => {
+        console.error("Dashboard companies engagement error:", error);
+      },
+    },
+  );
+
   const reviewCategoryData =
     reviewVolumeByIndustryData?.map((item) => ({
       category: item.industry,
@@ -275,7 +288,7 @@ function CompanyInsights() {
           </div>
           <div className={styles.concern_section}>
             <h2>Emergency Concern Signals</h2>
-            {concerData.map((concern) => (
+            {concerSignalsData?.map((concern) => (
               <div
                 key={concern.id}
                 className={`${styles.concern_card} ${styles[concern.severity.toLowerCase()]}`}
@@ -283,16 +296,19 @@ function CompanyInsights() {
                 <div className={styles.concern_header}>
                   <InfoTriangle
                     color={
-                      concern.severity === "High"
+                      concern.severity === "critical" ||
+                      concern.severity === "high"
                         ? "#AB2A2C"
-                        : concern.severity === "Medium"
+                        : concern.severity === "medium"
                           ? "#AB7A2A"
                           : "#525252"
                     }
                   />
-                  <h4 className={styles.concern_company}>{concern.company}</h4>
+                  <h4 className={styles.concern_company}>
+                    {concern.companyName}
+                  </h4>
                 </div>
-                <p className={styles.content}>{concern.info}</p>
+                <p className={styles.content}>{concern.summary}</p>
               </div>
             ))}
           </div>
