@@ -123,7 +123,7 @@ function CurveChart({
             tickMargin={12}
             width={40}
             // tickFormatter={(value) => `${value / 1000}k`}
-            ticks={[0, 10, 30, 50, 70, 90, 110]}
+            ticks={[0, 100, 300, 500, 700, 900, 1100]}
           />
           <Tooltip
             content={<CustomTooltip />}
