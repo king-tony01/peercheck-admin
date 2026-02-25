@@ -18,11 +18,14 @@ import ReviewsIcon from "@/icons/ReviewsIcon";
 import MetricCard from "@/components/Cards/MetricCard";
 
 function Dashboard() {
+  const [filters, setFilters] = React.useState({
+    period: "",
+  });
   const {
     data: overviewData,
     isLoading,
     isError,
-  } = useFetch<OverviewMetricCards>(API_ROUTES.DASHBOARD_OVERVIEW, {
+  } = useFetch<OverviewMetricCards>(API_ROUTES.DASHBOARD_OVERVIEW(filters), {
     onError: (error) => {
       console.error("Dashboard overview error:", error);
     },
@@ -130,18 +133,21 @@ function Dashboard() {
           options={[
             {
               label: "Weekly",
-              value: "weekly",
+              value: "week",
             },
             {
               label: "Monthly",
-              value: "monthly",
+              value: "month",
             },
             {
               label: "Yearly",
-              value: "yearly",
+              value: "year",
             },
           ]}
           position="bottom-right"
+          onSelect={(opt) =>
+            setFilters((prev) => ({ ...prev, period: opt.value }))
+          }
         />
       }
       leftNodes={[
