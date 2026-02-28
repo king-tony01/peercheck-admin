@@ -13,14 +13,55 @@ import UserIcon from "@/icons/UserIcon";
 import CheckBox from "@/components/Input/CheckBox";
 import { useWindow } from "@/hooks/useWindow";
 import MobileTable from "@/components/Tables/MobileTable";
+import { FilterGroup } from "@/components/Filter/SmartFilter";
+import { API_ROUTES } from "@/routes/apiRoutes";
+import useFetch from "@/hooks/useFetch";
+import Loader from "@/components/Loader/Loader";
+import { useState, useEffect } from "react";
 
-function RecentActivity({
-  recentActivityData,
-}: {
-  recentActivityData: RecentActivtyData[];
-}) {
+function RecentActivity() {
   const { width } = useWindow();
+  const [searchValue, setSearchValue] = useState("");
+  const [queryParams, setQueryParams] = useState<Record<string, string>>({
+    search: "",
+    activityType: "",
+    period: "7_days",
+  });
+
+  // Debounce search input
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      setQueryParams((prev) => ({
+        ...prev,
+        search: searchValue,
+      }));
+    }, 500); // 500ms delay
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchValue]);
+  const { data: recentActivity, isLoading: isRecentActivityLoading } = useFetch<
+    RecentActivtyData[]
+  >(API_ROUTES.DASHBOARD_RECENT_ACTIVITY(queryParams), {
+    onError: (error) => {
+      console.error("Dashboard recent activity error:", error);
+    },
+  });
+
+  const filterData: FilterGroup[] = [
+    {
+      title: "Activity Type",
+      options: [
+        { label: "Review", value: "review" },
+        { label: "User", value: "user" },
+        { label: "Company", value: "company" },
+      ],
+      type: "checkbox",
+    },
+  ];
   const getActivityIcon = (type: string) => {
+    if (typeof type !== "string") {
+      return null;
+    }
     if (type.toLowerCase().includes("review")) {
       return <ReviewsIcon />;
     }
@@ -48,12 +89,17 @@ function RecentActivity({
           onChange={toggleAllRows}
         />
       ),
-      render: (row, { selectedRows, toggleRowSelection }) => (
-        <CheckBox
-          checked={selectedRows.has(row.id)}
-          onChange={() => toggleRowSelection(row.id)}
-        />
-      ),
+      render: (row, { selectedRows, toggleRowSelection }) => {
+        if (row.isSkeleton) {
+          return <Loader variant="skeleton" size="sm" />;
+        }
+        return (
+          <CheckBox
+            checked={selectedRows.has(row.id)}
+            onChange={() => toggleRowSelection(row.id)}
+          />
+        );
+      },
     },
     {
       key: "description",
@@ -78,9 +124,12 @@ function RecentActivity({
       key: "date",
       label: "Date",
       sortable: true,
-      render: (row) => (
-        <FormatDate date={row.created_at} options={{ short: false }} />
-      ),
+      render: (row) => {
+        if (row.isSkeleton) {
+          return <Loader variant="skeleton" size="sm" />;
+        }
+        return <FormatDate date={row.created_at} options={{ short: false }} />;
+      },
     },
     // {
     //   key: "status",
@@ -93,34 +142,61 @@ function RecentActivity({
       headerClassName: styles.actions_cell,
       className: styles.actions_cell,
       renderHeader: () => null,
-      render: () => (
-        <ActionDropdown
-          type="primary"
-          options={[
-            {
-              label: "View Details",
-              value: "view_details",
-            },
-            {
-              label: "Edit Activity",
-              value: "edit_activity",
-            },
-          ]}
-        />
-      ),
+      render: (row) => {
+        if (row.isSkeleton) {
+          return <Loader variant="skeleton" size="sm" />;
+        }
+        return (
+          <ActionDropdown
+            type="primary"
+            options={[
+              {
+                label: "View Details",
+                value: "view_details",
+              },
+              {
+                label: "Edit Activity",
+                value: "edit_activity",
+              },
+            ]}
+          />
+        );
+      },
     },
   ];
 
-  const tableData = recentActivityData ?? [];
+  // Generate skeleton rows for loading state
+  const skeletonRows = Array.from({ length: 5 }).map((_, index) => ({
+    id: `skeleton-${index}`,
+    isSkeleton: true,
+    description: <Loader variant="skeleton" size="sm" />,
+    logName: "Loading...",
+    created_at: new Date().toISOString(),
+  }));
+
+  const tableData = isRecentActivityLoading
+    ? skeletonRows
+    : (recentActivity ?? []);
+
   return (
     <section className={styles.recent_activity}>
       <div className={styles.header}>
         <h2>RECENT ACTIVITY</h2>
         <div className={styles.controls}>
-          <SearchInput placeholder="Search..." />
+          <SearchInput
+            placeholder="Search..."
+            onChange={(value) => setSearchValue(value)}
+          />
           <SmartFilter
+            filterData={filterData}
             onFilterChange={(filters) => {
-              console.log("Applied Filters:", filters);
+              const activityTypes = filters["Activity Type"] || [];
+              setQueryParams((prev) => ({
+                ...prev,
+                activityType: Array.isArray(activityTypes)
+                  ? activityTypes.join(",")
+                  : "",
+              }));
             }}
           />
           <DropdownInput
@@ -136,6 +212,12 @@ function RecentActivity({
               },
             ]}
             position="bottom-right"
+            onSelect={(option) =>
+              setQueryParams((prev) => ({
+                ...prev,
+                period: option.value,
+              }))
+            }
           />
         </div>
       </div>
@@ -145,7 +227,10 @@ function RecentActivity({
           showCheckbox={true}
           emptyTitle="No recent activity"
           emptyMessage="Activity will appear here as it happens"
-          data={tableData.map((row) => ({
+          data={(isRecentActivityLoading
+            ? skeletonRows
+            : (recentActivity ?? [])
+          ).map((row) => ({
             id: row.id,
             content: (
               <div className={styles.mobile_activity_item}>
@@ -179,7 +264,7 @@ function RecentActivity({
       ) : (
         <DynamicTable
           columns={DEFAULT_COLUMNS}
-          data={tableData}
+          data={isRecentActivityLoading ? skeletonRows : (recentActivity ?? [])}
           emptyTitle="No recent activity"
           emptyMessage="Activity will appear here as it happens"
         />

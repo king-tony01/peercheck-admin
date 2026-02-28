@@ -5,7 +5,6 @@ import ClipBoardIcon from "@/icons/ClipBoardIcon";
 import ExportIcon from "@/icons/ExportIcon";
 import PageLayout from "@/layouts/PageLayout/PageLayout";
 import React from "react";
-import RecentActivity from "./RecentActivity";
 import UsersIcon from "@/icons/UsersIcon";
 import ReviewsIcon from "@/icons/ReviewsIcon";
 import styles from "./styles/UserInsights.module.css";
@@ -15,6 +14,7 @@ import ListChart from "@/components/Charts/ListChart";
 import CustomPieChart from "@/components/Charts/CustomPieChart";
 import useFetch from "@/hooks/useFetch";
 import { API_ROUTES } from "@/routes/apiRoutes";
+import RecentActivity from "./RecentActivity";
 
 function UserInsights() {
   const {
@@ -24,14 +24,6 @@ function UserInsights() {
   } = useFetch<UserInsightsData>(API_ROUTES.ANALYTICS_USERS_INSIGHTS, {
     onError: (error) => {
       console.error("Analytics user insights error:", error);
-    },
-  });
-
-  const { data: recentActivity, isLoading: isRecentActivityLoading } = useFetch<
-    RecentActivtyData[]
-  >(API_ROUTES.DASHBOARD_RECENT_ACTIVITY, {
-    onError: (error) => {
-      console.error("Dashboard recent activity error:", error);
     },
   });
 
@@ -217,7 +209,7 @@ function UserInsights() {
             />
           </div>
         </section>
-        <RecentActivity recentActivityData={recentActivity ?? []} />
+        <RecentActivity />
       </div>
     </PageLayout>
   );

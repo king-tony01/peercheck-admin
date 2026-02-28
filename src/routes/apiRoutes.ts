@@ -11,7 +11,8 @@ export const BACKEND_ROUTES = {
   ANALYTICS_COMPANY_INSIGHTS_STATS: "/companies/insights/overview",
   ANALYTICS_USERS_INSIGHTS: "/statistics/user-analytics",
   ANALYTICS_EMERGENCY_CONCERN_SIGNALS: "/insights/concern-signals/recents",
-  DASHBOARD_RECENT_ACTIVITY: "/logs/recent",
+  DASHBOARD_RECENT_ACTIVITY: (params: Record<string, string>) =>
+    `/logs/recent?${new URLSearchParams(params).toString()}`,
   LOGOUT_ADMIN: "/auth/logout",
   SAMPLE_COMPANIES: "/companies",
   UPDATE_SETTINGS: "/api/settings/update",
@@ -22,7 +23,8 @@ export const API_ROUTES = {
   DASHBOARD_OVERVIEW: (params: Record<string, string>) =>
     `/api/dashboard/overview?${new URLSearchParams(params).toString()}`,
   DASHBOARD_USER_ENGAGEMENT_CHART: "/api/dashboard/user-engagement-chart",
-  DASHBOARD_RECENT_ACTIVITY: "/api/dashboard/recent-activity",
+  DASHBOARD_RECENT_ACTIVITY: (queryParams: Record<string, string>) =>
+    `/api/dashboard/recent-activity?${new URLSearchParams(queryParams).toString()}`,
   ANALYTICS_COMPANY_INSIGHTS: "/api/analytics/company-insights",
   ANALYTICS_COMPANY_INSIGHTS_REVIEW_BY_INDUSTRY:
     "/api/analytics/company-insights/review-volume-by-industry",
