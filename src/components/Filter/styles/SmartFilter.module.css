@@ -52,9 +52,7 @@
   margin: 0 0 10px 0;
   font-size: 12px;
   font-weight: 700;
-  color: #999;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  text-transform: capitalize;
 }
 
 .filter_options {
