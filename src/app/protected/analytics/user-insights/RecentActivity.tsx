@@ -6,7 +6,7 @@ import DynamicTable from "@/components/Tables/DynamicTable";
 import FormatDate from "@/components/date/FormatDate";
 import CompaniesIcon from "@/icons/CompaniesIcon";
 import ReviewsIcon from "@/icons/ReviewsIcon";
-import styles from "./styles/Dashboard.module.css";
+import styles from "../../dashboard/styles/Dashboard.module.css";
 import ActionDropdown from "@/components/Input/ActionDropdown";
 import FormatStatus from "@/components/wrappers/FormatStatus";
 import UserIcon from "@/icons/UserIcon";
