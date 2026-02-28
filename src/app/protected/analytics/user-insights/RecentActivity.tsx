@@ -6,31 +6,71 @@ import DynamicTable from "@/components/Tables/DynamicTable";
 import FormatDate from "@/components/date/FormatDate";
 import CompaniesIcon from "@/icons/CompaniesIcon";
 import ReviewsIcon from "@/icons/ReviewsIcon";
-import styles from "./styles/UserInsights.module.css";
+import styles from "./styles/Dashboard.module.css";
 import ActionDropdown from "@/components/Input/ActionDropdown";
 import FormatStatus from "@/components/wrappers/FormatStatus";
 import UserIcon from "@/icons/UserIcon";
 import CheckBox from "@/components/Input/CheckBox";
 import { useWindow } from "@/hooks/useWindow";
 import MobileTable from "@/components/Tables/MobileTable";
+import { FilterGroup } from "@/components/Filter/SmartFilter";
+import { API_ROUTES } from "@/routes/apiRoutes";
+import useFetch from "@/hooks/useFetch";
+import Loader from "@/components/Loader/Loader";
+import { useState, useEffect } from "react";
 
-function RecentActivity({
-  recentActivityData,
-}: {
-  recentActivityData: RecentActivtyData[];
-}) {
+function RecentActivity() {
   const { width } = useWindow();
+  const [searchValue, setSearchValue] = useState("");
+  const [queryParams, setQueryParams] = useState<Record<string, string>>({
+    search: "",
+    activityType: "",
+    period: "7_days",
+  });
+
+  // Debounce search input
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      setQueryParams((prev) => ({
+        ...prev,
+        search: searchValue,
+      }));
+    }, 500); // 500ms delay
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchValue]);
+  const { data: recentActivity, isLoading: isRecentActivityLoading } = useFetch<
+    RecentActivtyData[]
+  >(API_ROUTES.DASHBOARD_RECENT_ACTIVITY(queryParams), {
+    onError: (error) => {
+      console.error("Dashboard recent activity error:", error);
+    },
+  });
+
+  const filterData: FilterGroup[] = [
+    {
+      title: "Activity Type",
+      options: [
+        { label: "Review", value: "review" },
+        { label: "User", value: "user" },
+        { label: "Company", value: "company" },
+      ],
+      type: "checkbox",
+    },
+  ];
   const getActivityIcon = (type: string) => {
+    if (typeof type !== "string") {
+      return null;
+    }
     if (type.toLowerCase().includes("review")) {
       return <ReviewsIcon />;
     }
+
     switch (type) {
       case "User":
         return <UserIcon />;
       case "Company":
         return <CompaniesIcon />;
-      case "Review":
-        return <ReviewsIcon />;
       default:
         return null;
     }
@@ -49,12 +89,17 @@ function RecentActivity({
           onChange={toggleAllRows}
         />
       ),
-      render: (row, { selectedRows, toggleRowSelection }) => (
-        <CheckBox
-          checked={selectedRows.has(row.id)}
-          onChange={() => toggleRowSelection(row.id)}
-        />
-      ),
+      render: (row, { selectedRows, toggleRowSelection }) => {
+        if (row.isSkeleton) {
+          return <Loader variant="skeleton" size="sm" />;
+        }
+        return (
+          <CheckBox
+            checked={selectedRows.has(row.id)}
+            onChange={() => toggleRowSelection(row.id)}
+          />
+        );
+      },
     },
     {
       key: "description",
@@ -79,95 +124,79 @@ function RecentActivity({
       key: "date",
       label: "Date",
       sortable: true,
-      render: (row) => (
-        <FormatDate date={row.created_at} options={{ short: false }} />
-      ),
+      render: (row) => {
+        if (row.isSkeleton) {
+          return <Loader variant="skeleton" size="sm" />;
+        }
+        return <FormatDate date={row.created_at} options={{ short: false }} />;
+      },
     },
-    {
-      key: "status",
-      label: "Status",
-      sortable: true,
-      render: (row) => <FormatStatus status={row.status} />,
-    },
+    // {
+    //   key: "status",
+    //   label: "Status",
+    //   sortable: true,
+    //   render: (row) => <FormatStatus status={row.status} />,
+    // },
     {
       key: "actions",
       headerClassName: styles.actions_cell,
       className: styles.actions_cell,
       renderHeader: () => null,
-      render: () => (
-        <ActionDropdown
-          type="primary"
-          options={[
-            {
-              label: "View Details",
-              value: "view_details",
-            },
-            {
-              label: "Edit Activity",
-              value: "edit_activity",
-            },
-          ]}
-        />
-      ),
+      render: (row) => {
+        if (row.isSkeleton) {
+          return <Loader variant="skeleton" size="sm" />;
+        }
+        return (
+          <ActionDropdown
+            type="primary"
+            options={[
+              {
+                label: "View Details",
+                value: "view_details",
+              },
+              {
+                label: "Edit Activity",
+                value: "edit_activity",
+              },
+            ]}
+          />
+        );
+      },
     },
   ];
 
-  const DEFAULT_DATA: TableRow[] = [
-    {
-      id: "1",
-      description: "New user registered - me@gmail.com",
-      activityType: "User",
-      date: "18 October, 2025",
-      status: "Completed",
-    },
-    {
-      id: "2",
-      description: "Company 'Tech360' submitted for verification",
-      activityType: "Company",
-      date: "18 October, 2025",
-      status: "Pending",
-    },
-    {
-      id: "3",
-      description: "New salary review posted for Flutterwave",
-      activityType: "Review",
-      date: "18 October, 2025",
-      status: "Approved",
-    },
-    {
-      id: "4",
-      description: "New salary review posted for Flutterwave",
-      activityType: "Review",
-      date: "18 October, 2025",
-      status: "Approved",
-    },
-    {
-      id: "5",
-      description: "New salary review posted for Flutterwave",
-      activityType: "Review",
-      date: "18 October, 2025",
-      status: "Approved",
-    },
-    {
-      id: "6",
-      description: "New salary review posted for Flutterwave",
-      activityType: "Review",
-      date: "18 October, 2025",
-      status: "Approved",
-    },
-  ];
+  // Generate skeleton rows for loading state
+  const skeletonRows = Array.from({ length: 5 }).map((_, index) => ({
+    id: `skeleton-${index}`,
+    isSkeleton: true,
+    description: <Loader variant="skeleton" size="sm" />,
+    logName: "Loading...",
+    created_at: new Date().toISOString(),
+  }));
 
-  const tableData = recentActivityData ?? [];
+  const tableData = isRecentActivityLoading
+    ? skeletonRows
+    : (recentActivity ?? []);
 
   return (
     <section className={styles.recent_activity}>
       <div className={styles.header}>
         <h2>RECENT ACTIVITY</h2>
         <div className={styles.controls}>
-          <SearchInput placeholder="Search..." />
+          <SearchInput
+            placeholder="Search..."
+            onChange={(value) => setSearchValue(value)}
+          />
           <SmartFilter
+            filterData={filterData}
             onFilterChange={(filters) => {
-              console.log("Applied Filters:", filters);
+              const activityTypes = filters["Activity Type"] || [];
+              setQueryParams((prev) => ({
+                ...prev,
+                activityType: Array.isArray(activityTypes)
+                  ? activityTypes.join(",")
+                  : "",
+              }));
             }}
           />
           <DropdownInput
@@ -183,6 +212,12 @@ function RecentActivity({
               },
             ]}
             position="bottom-right"
+            onSelect={(option) =>
+              setQueryParams((prev) => ({
+                ...prev,
+                period: option.value,
+              }))
+            }
           />
         </div>
       </div>
@@ -190,9 +225,12 @@ function RecentActivity({
         <MobileTable
           headerTitle="Description"
           showCheckbox={true}
-          emptyTitle="No activity yet"
-          emptyMessage="Recent user activity will appear here"
-          data={tableData.map((row) => ({
+          emptyTitle="No recent activity"
+          emptyMessage="Activity will appear here as it happens"
+          data={(isRecentActivityLoading
+            ? skeletonRows
+            : (recentActivity ?? [])
+          ).map((row) => ({
             id: row.id,
             content: (
               <div className={styles.mobile_activity_item}>
@@ -226,9 +264,9 @@ function RecentActivity({
       ) : (
         <DynamicTable
           columns={DEFAULT_COLUMNS}
-          data={tableData}
-          emptyTitle="No activity yet"
-          emptyMessage="Recent user activity will appear here"
+          data={isRecentActivityLoading ? skeletonRows : (recentActivity ?? [])}
+          emptyTitle="No recent activity"
+          emptyMessage="Activity will appear here as it happens"
         />
       )}
     </section>
