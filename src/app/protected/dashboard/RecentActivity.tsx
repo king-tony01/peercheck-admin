@@ -78,15 +78,14 @@ function RecentActivity() {
     Number(queryParams.per_page || queryParams.limit || "5") ||
     5;
   const totalPages = paginationMeta?.last_page || 1;
-  const activityTypeOptions =
-    activityTypesResponse?.map((item) => ({
-      label: item.name,
-      value: item.id,
-    })) ?? [
-      { label: "Review", value: "review" },
-      { label: "User", value: "user" },
-      { label: "Company", value: "company" },
-    ];
+  const activityTypeOptions = activityTypesResponse?.map((item) => ({
+    label: item.name,
+    value: item.id,
+  })) ?? [
+    { label: "Review", value: "review" },
+    { label: "User", value: "user" },
+    { label: "Company", value: "company" },
+  ];
 
   useEffect(() => {
     if (activityTypesResponse) {
@@ -110,7 +109,7 @@ function RecentActivity() {
     {
       title: "Activity Type",
       options: activityTypeOptions,
-      type: "checkbox",
+      type: "radio",
     },
   ];
   const getActivityIcon = (type: string) => {
@@ -241,12 +240,13 @@ function RecentActivity() {
           <SmartFilter
             filterData={filterData}
             onFilterChange={(filters) => {
-              const activityTypes = filters["Activity Type"] || [];
+              const selectedActivityType = filters["Activity Type"];
               setQueryParams((prev) => ({
                 ...prev,
-                activityType: Array.isArray(activityTypes)
-                  ? activityTypes.join(",")
-                  : "",
+                activityType:
+                  typeof selectedActivityType === "string"
+                    ? selectedActivityType
+                    : "",
                 page: "1",
               }));
             }}

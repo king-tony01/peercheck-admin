@@ -85,6 +85,61 @@
   }
 }
 
+.filter_radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    border-radius: 50%;
+    border: 2px solid #d8dde6;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    &::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #8bdb2f;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 0.15s ease;
+    }
+
+    &:checked {
+      border-color: #8bdb2f;
+
+      &::after {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(139, 219, 47, 0.2);
+    }
+  }
+
+  label {
+    margin: 0;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    flex: 1;
+  }
+}
+
 .filter_actions {
   display: flex;
   gap: 8px;

@@ -18,6 +18,11 @@ import useFetch from "@/hooks/useFetch";
 import Loader from "@/components/Loader/Loader";
 import { useState, useEffect } from "react";
 
+interface ActivityTypeItem {
+  id: string;
+  name: string;
+}
+
 const formatDateForQuery = (date: Date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -71,6 +76,15 @@ function RecentActivity() {
       },
     );
 
+  const { data: activityTypesResponse } = useFetch<ActivityTypeItem[]>(
+    API_ROUTES.DASHBOARD_ACTIVITY_TYPES,
+    {
+      onError: (error) => {
+        console.error("Dashboard activity types error:", error);
+      },
+    },
+  );
+
   const recentActivity = recentActivityResponse?.data ?? [];
   const paginationMeta = recentActivityResponse?.meta;
   const currentPage =
@@ -80,16 +94,20 @@ function RecentActivity() {
     Number(queryParams.per_page || queryParams.limit || "5") ||
     5;
   const totalPages = paginationMeta?.last_page || 1;
+  const activityTypeOptions = activityTypesResponse?.map((item) => ({
+    label: item.name,
+    value: item.id,
+  })) ?? [
+    { label: "Review", value: "review" },
+    { label: "User", value: "user" },
+    { label: "Company", value: "company" },
+  ];
 
   const filterData: FilterGroup[] = [
     {
       title: "Activity Type",
-      options: [
-        { label: "Review", value: "review" },
-        { label: "User", value: "user" },
-        { label: "Company", value: "company" },
-      ],
-      type: "checkbox",
+      options: activityTypeOptions,
+      type: "radio",
     },
   ];
   const getActivityIcon = (type: string) => {
@@ -220,12 +238,13 @@ function RecentActivity() {
           <SmartFilter
             filterData={filterData}
             onFilterChange={(filters) => {
-              const activityTypes = filters["Activity Type"] || [];
+              const selectedActivityType = filters["Activity Type"];
               setQueryParams((prev) => ({
                 ...prev,
-                activityType: Array.isArray(activityTypes)
-                  ? activityTypes.join(",")
-                  : "",
+                activityType:
+                  typeof selectedActivityType === "string"
+                    ? selectedActivityType
+                    : "",
                 page: "1",
               }));
             }}
