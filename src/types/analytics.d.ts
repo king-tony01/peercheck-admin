@@ -102,3 +102,23 @@ interface ConserSignalMetrics {
   positive_interview_percentage?: number;
   time_window_days: number;
 }
+
+interface CompanyProfileTraffic {
+  items: Item[];
+  pagination: CompanyProfileTrafficPagination;
+}
+
+interface Item {
+  companyId: string;
+  company: string;
+  industry: string;
+  totalVisits: number;
+  totalReviews: number;
+}
+
+interface CompanyProfileTrafficPagination {
+  currentPage: number;
+  perPage: number;
+  total: number;
+  lastPage: number;
+}

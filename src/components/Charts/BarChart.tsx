@@ -62,7 +62,7 @@ function CustomBarChart({
   yAxisTicks?: number[];
   tickFormatter?: (value: number) => string;
 }) {
-  const pageSize = 10;
+  const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = paginated
     ? Math.max(1, Math.ceil(data.length / pageSize))

@@ -27,6 +27,13 @@ interface DynamicTableProps {
   columns: TableColumn[];
   data: TableRow[];
   itemsPerPage?: number;
+  currentPage?: number;
+  onPageChange?: (page: number) => void;
+  perPage?: number;
+  onPerPageChange?: (perPage: number) => void;
+  serverPagination?: boolean;
+  totalPages?: number;
+  totalItems?: number;
   isLoading?: boolean;
   emptyTitle?: string;
   emptyMessage?: string;

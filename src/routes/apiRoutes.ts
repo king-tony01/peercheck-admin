@@ -1,21 +1,26 @@
 export const BACKEND_ROUTES = {
-  LOGIN_ADMIN: "/auth/login",
+  LOGIN_ADMIN: "/admin/auth/login",
   DASHBOARD_OVERVIEW: (params: Record<string, string>) =>
-    `/statistics/dashboard/overview?${new URLSearchParams(params).toString()}`,
-  DASHBOARD_USER_ENGAGEMENT_CHART: "/statistics/dashboard/user-engagement",
-  ANALYTICS_COMPANY_INSIGHTS: "/statistics/company-analytics",
+    `/admin/statistics/dashboard/overview?${new URLSearchParams(params).toString()}`,
+  DASHBOARD_USER_ENGAGEMENT_CHART:
+    "/admin/statistics/dashboard/user-engagement",
+  ANALYTICS_COMPANY_INSIGHTS: "/admin/statistics/company-analytics",
   ANALYTICS_COMPANY_INSIGHTS_REVIEW_BY_INDUSTRY:
-    "/companies/insights/review-volume-by-industry",
+    "/admin/companies/insights/review-volume-by-industry",
   ANALYTICS_COMPANY_INSIGHTS_COVERAGE_DEPTH_BY_INDUSTRY:
-    "/companies/insights/company-coverage-depth",
-  ANALYTICS_COMPANY_INSIGHTS_STATS: "/companies/insights/overview",
-  ANALYTICS_USERS_INSIGHTS: "/statistics/user-analytics",
-  ANALYTICS_EMERGENCY_CONCERN_SIGNALS: "/insights/concern-signals/recents",
+    "/admin/companies/insights/company-coverage-depth",
+  ANALYTICS_COMPANY_INSIGHTS_STATS: "/admin/companies/insights/overview",
+  ANALYTICS_COMPANY_PROFILE_TRAFFIC:
+    "/admin/companies/insights/profile-traffic",
+  ANALYTICS_USERS_INSIGHTS: "/admin/statistics/user-analytics",
+  ANALYTICS_EMERGENCY_CONCERN_SIGNALS:
+    "/admin/insights/concern-signals/recents",
   DASHBOARD_RECENT_ACTIVITY: (params: Record<string, string>) =>
-    `/logs/recent?${new URLSearchParams(params).toString()}`,
-  LOGOUT_ADMIN: "/auth/logout",
-  SAMPLE_COMPANIES: "/companies",
-  UPDATE_SETTINGS: "/api/settings/update",
+    `/admin/logs/recent?${new URLSearchParams(params).toString()}`,
+  DASHBOARD_ACTIVITY_TYPES: "/settings/activity-types",
+  LOGOUT_ADMIN: "/admin/auth/logout",
+  SAMPLE_COMPANIES: "/admin/companies",
+  UPDATE_SETTINGS: "/admin/api/settings/update",
 } as const;
 
 export const API_ROUTES = {
@@ -25,12 +30,15 @@ export const API_ROUTES = {
   DASHBOARD_USER_ENGAGEMENT_CHART: "/api/dashboard/user-engagement-chart",
   DASHBOARD_RECENT_ACTIVITY: (queryParams: Record<string, string>) =>
     `/api/dashboard/recent-activity?${new URLSearchParams(queryParams).toString()}`,
+  DASHBOARD_ACTIVITY_TYPES: "/api/dashboard/activity-types",
   ANALYTICS_COMPANY_INSIGHTS: "/api/analytics/company-insights",
   ANALYTICS_COMPANY_INSIGHTS_REVIEW_BY_INDUSTRY:
     "/api/analytics/company-insights/review-volume-by-industry",
   ANALYTICS_COMPANY_INSIGHTS_COVERAGE_DEPTH_BY_INDUSTRY:
     "/api/analytics/company-insights/coverage-depth-by-industry",
   ANALYTICS_COMPANY_INSIGHTS_STATS: "/api/analytics/company-insights/stats",
+  ANALYTICS_COMPANY_PROFILE_TRAFFIC:
+    "/api/analytics/company-insights/profile-traffic",
   ANALYTICS_USERS_INSIGHTS: "/api/analytics/user-insights",
   ANALYTICS_EMERGENCY_CONCERN_SIGNALS:
     "/api/analytics/company-insights/concern-signals",
