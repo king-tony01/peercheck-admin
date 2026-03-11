@@ -14,6 +14,7 @@
 }
 .admin_layout .side_nav_area {
   flex: 1;
+  height: 100%;
   overflow-y: auto;
 }
 .admin_layout .side_nav_area::-webkit-scrollbar {
