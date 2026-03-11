@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import styles from "./styles/Table.module.css";
 import TableHeaderIcon from "@/icons/TableHeaderIcon";
 import DropdownInput from "../Input/DropdownInput";
@@ -34,6 +34,13 @@ interface DynamicTableProps {
   columns: TableColumn[];
   data: TableRow[];
   itemsPerPage?: number;
+  currentPage?: number;
+  onPageChange?: (page: number) => void;
+  perPage?: number;
+  onPerPageChange?: (perPage: number) => void;
+  serverPagination?: boolean;
+  totalPages?: number;
+  totalItems?: number;
   isLoading?: boolean;
   emptyTitle?: string;
   emptyMessage?: string;
@@ -43,20 +50,104 @@ function DynamicTable({
   columns,
   data,
   itemsPerPage = 7,
+  currentPage: controlledCurrentPage,
+  onPageChange,
+  perPage: controlledPerPage,
+  onPerPageChange,
+  serverPagination = false,
+  totalPages: controlledTotalPages,
+  totalItems,
   isLoading = false,
   emptyTitle = "No records yet",
   emptyMessage = "Data will appear here once available",
 }: DynamicTableProps) {
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(itemsPerPage);
+  const [internalCurrentPage, setInternalCurrentPage] = useState(1);
+  const [internalPerPage, setInternalPerPage] = useState(itemsPerPage);
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
-  const totalPages = Math.ceil(data.length / perPage);
-  const startIndex = (currentPage - 1) * perPage;
+  const currentPage = controlledCurrentPage ?? internalCurrentPage;
+  const perPage = controlledPerPage ?? internalPerPage;
+
+  const sortedData = useMemo(() => {
+    if (!sortColumn) {
+      return data;
+    }
+
+    return [...data].sort((leftRow, rightRow) => {
+      const leftValue = leftRow[sortColumn];
+      const rightValue = rightRow[sortColumn];
+
+      if (leftValue == null && rightValue == null) {
+        return 0;
+      }
+
+      if (leftValue == null) {
+        return sortDirection === "asc" ? 1 : -1;
+      }
+
+      if (rightValue == null) {
+        return sortDirection === "asc" ? -1 : 1;
+      }
+
+      if (typeof leftValue === "number" && typeof rightValue === "number") {
+        return sortDirection === "asc"
+          ? leftValue - rightValue
+          : rightValue - leftValue;
+      }
+
+      const leftDate = Date.parse(String(leftValue));
+      const rightDate = Date.parse(String(rightValue));
+
+      if (!Number.isNaN(leftDate) && !Number.isNaN(rightDate)) {
+        return sortDirection === "asc"
+          ? leftDate - rightDate
+          : rightDate - leftDate;
+      }
+
+      const leftText = String(leftValue).toLowerCase();
+      const rightText = String(rightValue).toLowerCase();
+      const comparison = leftText.localeCompare(rightText, undefined, {
+        numeric: true,
+        sensitivity: "base",
+      });
+
+      return sortDirection === "asc" ? comparison : -comparison;
+    });
+  }, [data, sortColumn, sortDirection]);
+
+  const totalPages = controlledTotalPages
+    ? Math.max(1, controlledTotalPages)
+    : Math.max(
+        1,
+        Math.ceil((totalItems ?? sortedData.length) / Math.max(perPage, 1)),
+      );
+  const normalizedCurrentPage = Math.min(Math.max(currentPage, 1), totalPages);
+  const startIndex = (normalizedCurrentPage - 1) * perPage;
   const endIndex = startIndex + perPage;
-  const currentData = data.slice(startIndex, endIndex);
+  const currentData = serverPagination
+    ? sortedData
+    : sortedData.slice(startIndex, endIndex);
+
+  const handlePageChange = (nextPage: number) => {
+    const boundedPage = Math.min(Math.max(nextPage, 1), totalPages);
+
+    if (controlledCurrentPage === undefined) {
+      setInternalCurrentPage(boundedPage);
+    }
+
+    onPageChange?.(boundedPage);
+  };
+
+  const handlePerPageChange = (nextPerPage: number) => {
+    if (controlledPerPage === undefined) {
+      setInternalPerPage(nextPerPage);
+    }
+
+    onPerPageChange?.(nextPerPage);
+    handlePageChange(1);
+  };
 
   const toggleRowSelection = (id: string) => {
     const newSelected = new Set(selectedRows);
@@ -94,8 +185,8 @@ function DynamicTable({
         buttons.push(
           <button
             key={i}
-            className={`${styles.page_button} ${i === currentPage ? styles.active : ""}`}
-            onClick={() => setCurrentPage(i)}
+            className={`${styles.page_button} ${i === normalizedCurrentPage ? styles.active : ""}`}
+            onClick={() => handlePageChange(i)}
           >
             {i}
           </button>,
@@ -105,14 +196,14 @@ function DynamicTable({
       buttons.push(
         <button
           key={1}
-          className={`${styles.page_button} ${1 === currentPage ? styles.active : ""}`}
-          onClick={() => setCurrentPage(1)}
+          className={`${styles.page_button} ${1 === normalizedCurrentPage ? styles.active : ""}`}
+          onClick={() => handlePageChange(1)}
         >
           1
         </button>,
       );
 
-      if (currentPage > 3) {
+      if (normalizedCurrentPage > 3) {
         buttons.push(
           <span key="ellipsis1" className={styles.page_ellipsis}>
             ...
@@ -120,22 +211,22 @@ function DynamicTable({
         );
       }
 
-      const start = Math.max(2, currentPage - 1);
-      const end = Math.min(totalPages - 1, currentPage + 1);
+      const start = Math.max(2, normalizedCurrentPage - 1);
+      const end = Math.min(totalPages - 1, normalizedCurrentPage + 1);
 
       for (let i = start; i <= end; i++) {
         buttons.push(
           <button
             key={i}
-            className={`${styles.page_button} ${i === currentPage ? styles.active : ""}`}
-            onClick={() => setCurrentPage(i)}
+            className={`${styles.page_button} ${i === normalizedCurrentPage ? styles.active : ""}`}
+            onClick={() => handlePageChange(i)}
           >
             {i}
           </button>,
         );
       }
 
-      if (currentPage < totalPages - 2) {
+      if (normalizedCurrentPage < totalPages - 2) {
         buttons.push(
           <span key="ellipsis2" className={styles.page_ellipsis}>
             ...
@@ -146,8 +237,8 @@ function DynamicTable({
       buttons.push(
         <button
           key={totalPages}
-          className={`${styles.page_button} ${totalPages === currentPage ? styles.active : ""}`}
-          onClick={() => setCurrentPage(totalPages)}
+          className={`${styles.page_button} ${totalPages === normalizedCurrentPage ? styles.active : ""}`}
+          onClick={() => handlePageChange(totalPages)}
         >
           {totalPages}
         </button>,
@@ -241,40 +332,38 @@ function DynamicTable({
         </tbody>
       </table>
 
-      {data.length > 0 && (
+      {sortedData.length > 0 && (
         <div className={styles.pagination}>
           <div className={styles.page_info}>
-            Page {currentPage} of {totalPages}
+            Page {normalizedCurrentPage} of {totalPages}
           </div>
           <div className={styles.pagination_controls}>
             <button
               className={styles.page_button}
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
+              onClick={() => handlePageChange(1)}
+              disabled={normalizedCurrentPage === 1}
             >
               «
             </button>
             <button
               className={styles.page_button}
-              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
+              onClick={() => handlePageChange(normalizedCurrentPage - 1)}
+              disabled={normalizedCurrentPage === 1}
             >
               ‹
             </button>
             {renderPaginationButtons()}
             <button
               className={styles.page_button}
-              onClick={() =>
-                setCurrentPage(Math.min(totalPages, currentPage + 1))
-              }
-              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(normalizedCurrentPage + 1)}
+              disabled={normalizedCurrentPage === totalPages}
             >
               ›
             </button>
             <button
               className={styles.page_button}
-              onClick={() => setCurrentPage(totalPages)}
-              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(totalPages)}
+              disabled={normalizedCurrentPage === totalPages}
             >
               »
             </button>
@@ -292,7 +381,7 @@ function DynamicTable({
                 { label: "20 / page", value: "20" },
                 { label: "50 / page", value: "50" },
               ]}
-              onSelect={(opt) => setPerPage(Number(opt.value))}
+              onSelect={(opt) => handlePerPageChange(Number(opt.value))}
               position="top-right"
             />
           </div>

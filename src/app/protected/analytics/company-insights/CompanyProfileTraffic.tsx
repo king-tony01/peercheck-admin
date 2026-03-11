@@ -3,192 +3,230 @@ import SmartFilter from "@/components/Filter/SmartFilter";
 import DropdownInput from "@/components/Input/DropdownInput";
 import SearchInput from "@/components/Input/SearchInput";
 import DynamicTable from "@/components/Tables/DynamicTable";
-import FormatDate from "@/components/date/FormatDate";
-import CompaniesIcon from "@/icons/CompaniesIcon";
-import ReviewsIcon from "@/icons/ReviewsIcon";
 import styles from "./styles/CompanInsights.module.css";
-import ActionDropdown from "@/components/Input/ActionDropdown";
-import FormatStatus from "@/components/wrappers/FormatStatus";
-import UserIcon from "@/icons/UserIcon";
-import CheckBox from "@/components/Input/CheckBox";
+import useFetch from "@/hooks/useFetch";
+import { API_ROUTES } from "@/routes/apiRoutes";
+import { useEffect, useState } from "react";
+import Loader from "@/components/Loader/Loader";
+
+const formatDateForQuery = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const buildDateRangeValue = (daysBack: number) => {
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setDate(endDate.getDate() - daysBack);
+
+  return `${formatDateForQuery(startDate)}-${formatDateForQuery(endDate)}`;
+};
 
 function CompanyProfileTraffic() {
-  const getActivityIcon = (type: string) => {
-    switch (type) {
-      case "User":
-        return <UserIcon />;
-      case "Company":
-        return <CompaniesIcon />;
-      case "Review":
-        return <ReviewsIcon />;
-      default:
-        return null;
-    }
-  };
+  const [searchValue, setSearchValue] = useState("");
+  const defaultRangeValue = buildDateRangeValue(7);
+  const [queryParams, setQueryParams] = useState<Record<string, string>>({
+    startDate: defaultRangeValue.slice(0, 10),
+    endDate: defaultRangeValue.slice(11),
+    page: "1",
+    per_page: "7",
+    limit: "7",
+    search: "",
+  });
+
+  const currentPage = Number(queryParams.page || "1") || 1;
+  const perPage = Number(queryParams.per_page || queryParams.limit || "7") || 7;
+
+  const {
+    data: companyProfileTrafficResponse,
+    isLoading: isCompanyProfileTrafficLoading,
+  } = useFetch<CompanyProfileTraffic>(
+    `${API_ROUTES.ANALYTICS_COMPANY_PROFILE_TRAFFIC}?${new URLSearchParams(queryParams).toString()}`,
+    {
+      onError: (error) => {
+        console.error("Company profile traffic error:", error);
+      },
+    },
+  );
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      setQueryParams((prev) => ({
+        ...prev,
+        search: searchValue,
+        page: "1",
+      }));
+    }, 500);
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchValue]);
+
+  const normalizedItems = (
+    Array.isArray(companyProfileTrafficResponse)
+      ? companyProfileTrafficResponse
+      : Array.isArray((companyProfileTrafficResponse as any)?.items)
+        ? (companyProfileTrafficResponse as any).items
+        : Array.isArray((companyProfileTrafficResponse as any)?.data)
+          ? (companyProfileTrafficResponse as any).data
+          : []
+  ) as any[];
+
+  const trafficData: TableRow[] = normalizedItems.map((item, index) => ({
+    id: String(item.companyId ?? item.company_id ?? index),
+    company: item.company ?? item.company_name ?? "--",
+    industry: item.industry ?? "--",
+    totalVisits: item.totalVisits ?? item.total_visits ?? 0,
+    totalReviews: item.totalReviews ?? item.total_reviews ?? 0,
+    avgDurationPerSession: item.avgDurationPerSession ?? "--",
+  }));
+
+  const rawPagination = (companyProfileTrafficResponse as any)?.pagination;
+  const pagination = rawPagination
+    ? {
+        currentPage:
+          rawPagination.currentPage ??
+          rawPagination.current_page ??
+          currentPage,
+        perPage: rawPagination.perPage ?? rawPagination.per_page ?? perPage,
+        total: rawPagination.total ?? trafficData.length,
+        lastPage: rawPagination.lastPage ?? rawPagination.last_page ?? 1,
+      }
+    : undefined;
 
   const DEFAULT_COLUMNS: TableColumn[] = [
-    {
-      key: "checkbox",
-      //   headerClassName: styles.checkbox_cell,
-      //   className: styles.checkbox_cell,
-      //   renderHeader: ({ selectedRows, currentData, toggleAllRows }) => (
-      //     <CheckBox
-      //       checked={
-      //         selectedRows.size === currentData.length && currentData.length > 0
-      //       }
-      //       onChange={toggleAllRows}
-      //     />
-      //   ),
-      //   render: (row, { selectedRows, toggleRowSelection }) => (
-      //     <CheckBox
-      //       checked={selectedRows.has(row.id)}
-      //       onChange={() => toggleRowSelection(row.id)}
-      //     />
-      //   ),
-    },
     {
       key: "company",
       label: "Company",
       sortable: true,
       className: styles.description_cell,
-      render: (row) => (
-        <div className={styles.activity_type}>
-          <div className={styles.activity_icon}>
-            {getActivityIcon(row.activityType)}
-          </div>
-          <span>{row.company}</span>
-        </div>
-      ),
+      render: (row) => {
+        if (row.isSkeleton) {
+          return <Loader variant="skeleton" size="sm" />;
+        }
+
+        return <span>{row.company}</span>;
+      },
     },
     {
       key: "industry",
       label: "Industry",
       sortable: true,
-      //   render: (row) => (
-      //     <div className={styles.activity_type}>
-      //       <div className={styles.activity_icon}>
-      //         {getActivityIcon(row.activityType)}
-      //       </div>
-      //       <span>{row.activityType}</span>
-      //     </div>
-      //   ),
+      render: (row) => {
+        if (row.isSkeleton) {
+          return <Loader variant="skeleton" size="sm" />;
+        }
+
+        return row.industry;
+      },
     },
     {
       key: "totalVisits",
       label: "Total Visits",
       sortable: true,
-      //   render: (row) => row.totalVisits.toLocaleString(),
+      render: (row) => {
+        if (row.isSkeleton) {
+          return <Loader variant="skeleton" size="sm" />;
+        }
+
+        return row.totalVisits;
+      },
     },
     {
       key: "totalReviews",
       label: "Total Reviews",
       sortable: true,
-      //   render: (row) => row.totalReviews.toLocaleString(),
+      render: (row) => {
+        if (row.isSkeleton) {
+          return <Loader variant="skeleton" size="sm" />;
+        }
+
+        return row.totalReviews;
+      },
     },
-    {
-      key: "avgDurationPerSession",
-      label: "Avg Duration/Session",
-      headerClassName: styles.actions_cell,
-      className: styles.actions_cell,
-      //   renderHeader: () => null,
-      //   render: () => (
-      //     <ActionDropdown
-      //       type="primary"
-      //       options={[
-      //         {
-      //           label: "View Details",
-      //           value: "view_details",
-      //         },
-      //         {
-      //           label: "Edit Activity",
-      //           value: "edit_activity",
-      //         },
-      //       ]}
-      //     />
-      //   ),
-    },
+    // {
+    //   key: "avgDurationPerSession",
+    //   label: "Avg Duration/Session",
+    //   headerClassName: styles.actions_cell,
+    //   className: styles.actions_cell,
+    // },
   ];
 
-  const DEFAULT_DATA: TableRow[] = [
-    {
-      id: "1",
-      company: "United Bank of Africa",
-      industry: "Telecommunication",
-      totalVisits: "2000",
-      totalReviews: "1000",
-      avgDurationPerSession: "00hr:00min:00s",
-    },
-    {
-      id: "2",
-      company: "Zenith Bank",
-      industry: "Telecommunication",
-      totalVisits: "2000",
-      totalReviews: "1000",
-      avgDurationPerSession: "00hr:00min:00s",
-    },
-    {
-      id: "3",
-      company: "Flutterwave",
-      industry: "Telecommunication",
-      totalVisits: "2000",
-      totalReviews: "1000",
-      avgDurationPerSession: "00hr:00min:00s",
-    },
-    {
-      id: "4",
-      company: "Shuttlers",
-      industry: "Telecommunication",
-      totalVisits: "2000",
-      totalReviews: "1000",
-      avgDurationPerSession: "00hr:00min:00s",
-    },
-    {
-      id: "5",
-      company: "Opay",
-      industry: "Telecommunication",
-      totalVisits: "2000",
-      totalReviews: "1000",
-      avgDurationPerSession: "00hr:00min:00s",
-    },
-    {
-      id: "6",
-      company: "Moniepoint",
-      industry: "Telecommunication",
-      totalVisits: "2000",
-      totalReviews: "1000",
-      avgDurationPerSession: "00hr:00min:00s",
-    },
-  ];
+  const skeletonRows: TableRow[] = Array.from({ length: 5 }).map(
+    (_, index) => ({
+      id: `skeleton-${index}`,
+      isSkeleton: true,
+      company: "Loading...",
+      industry: "Loading...",
+      totalVisits: 0,
+      totalReviews: 0,
+    }),
+  );
+
   return (
     <section className={styles.company_profile_traffic}>
       <div className={styles.header}>
         <h2>company profile traffic</h2>
         <div className={styles.controls}>
-          <SearchInput placeholder="Search..." />
-          <SmartFilter
+          <SearchInput
+            placeholder="Search..."
+            onChange={(value) => setSearchValue(value)}
+          />
+          {/* <SmartFilter
             onFilterChange={(filters) => {
               console.log("Applied Filters:", filters);
             }}
-          />
+          /> */}
           <DropdownInput
             type="secondary"
             options={[
               {
                 label: "Last 7 days",
-                value: "7_days",
+                value: buildDateRangeValue(7),
               },
               {
                 label: "Last 30 days",
-                value: "30_days",
+                value: buildDateRangeValue(30),
               },
             ]}
             position="bottom-right"
+            onSelect={(option) => {
+              const startDate = option.value.slice(0, 10);
+              const endDate = option.value.slice(11);
+
+              setQueryParams((prev) => ({
+                ...prev,
+                startDate,
+                endDate,
+                page: "1",
+              }));
+            }}
           />
         </div>
       </div>
       <DynamicTable
         columns={DEFAULT_COLUMNS}
-        data={DEFAULT_DATA}
+        data={isCompanyProfileTrafficLoading ? skeletonRows : trafficData}
+        serverPagination
+        currentPage={pagination?.currentPage ?? currentPage}
+        perPage={pagination?.perPage ?? perPage}
+        totalPages={pagination?.lastPage ?? 1}
+        totalItems={pagination?.total ?? trafficData.length}
+        onPageChange={(nextPage) =>
+          setQueryParams((prev) => ({
+            ...prev,
+            page: String(nextPage),
+          }))
+        }
+        onPerPageChange={(nextPerPage) =>
+          setQueryParams((prev) => ({
+            ...prev,
+            page: "1",
+            per_page: String(nextPerPage),
+            limit: String(nextPerPage),
+          }))
+        }
         emptyTitle="No profile traffic data"
         emptyMessage="Company profile traffic data will appear here"
       />

@@ -8,7 +8,6 @@ import CompaniesIcon from "@/icons/CompaniesIcon";
 import ReviewsIcon from "@/icons/ReviewsIcon";
 import styles from "../../dashboard/styles/Dashboard.module.css";
 import ActionDropdown from "@/components/Input/ActionDropdown";
-import FormatStatus from "@/components/wrappers/FormatStatus";
 import UserIcon from "@/icons/UserIcon";
 import CheckBox from "@/components/Input/CheckBox";
 import { useWindow } from "@/hooks/useWindow";
@@ -19,13 +18,33 @@ import useFetch from "@/hooks/useFetch";
 import Loader from "@/components/Loader/Loader";
 import { useState, useEffect } from "react";
 
+const formatDateForQuery = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const buildDateRangeValue = (daysBack: number) => {
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setDate(endDate.getDate() - daysBack);
+
+  return `${formatDateForQuery(startDate)}-${formatDateForQuery(endDate)}`;
+};
+
 function RecentActivity() {
   const { width } = useWindow();
   const [searchValue, setSearchValue] = useState("");
+  const defaultRangeValue = buildDateRangeValue(7);
   const [queryParams, setQueryParams] = useState<Record<string, string>>({
     search: "",
     activityType: "",
-    period: "7_days",
+    startDate: defaultRangeValue.slice(0, 10),
+    endDate: defaultRangeValue.slice(11),
+    page: "1",
+    per_page: "5",
+    limit: "5",
   });
 
   // Debounce search input
@@ -34,18 +53,33 @@ function RecentActivity() {
       setQueryParams((prev) => ({
         ...prev,
         search: searchValue,
+        page: "1",
       }));
     }, 500); // 500ms delay
 
     return () => clearTimeout(debounceTimer);
   }, [searchValue]);
-  const { data: recentActivity, isLoading: isRecentActivityLoading } = useFetch<
-    RecentActivtyData[]
-  >(API_ROUTES.DASHBOARD_RECENT_ACTIVITY(queryParams), {
-    onError: (error) => {
-      console.error("Dashboard recent activity error:", error);
-    },
-  });
+
+  const { data: recentActivityResponse, isLoading: isRecentActivityLoading } =
+    useFetch<PaginatedApiSuccessResponse<RecentActivtyData[]>>(
+      API_ROUTES.DASHBOARD_RECENT_ACTIVITY(queryParams),
+      {
+        parser: async (res) => res.json(),
+        onError: (error) => {
+          console.error("Dashboard recent activity error:", error);
+        },
+      },
+    );
+
+  const recentActivity = recentActivityResponse?.data ?? [];
+  const paginationMeta = recentActivityResponse?.meta;
+  const currentPage =
+    paginationMeta?.current_page || Number(queryParams.page || "1") || 1;
+  const perPage =
+    paginationMeta?.per_page ||
+    Number(queryParams.per_page || queryParams.limit || "5") ||
+    5;
+  const totalPages = paginationMeta?.last_page || 1;
 
   const filterData: FilterGroup[] = [
     {
@@ -77,30 +111,30 @@ function RecentActivity() {
   };
 
   const DEFAULT_COLUMNS: TableColumn[] = [
-    {
-      key: "checkbox",
-      //   headerClassName: styles.checkbox_cell,
-      //   className: styles.checkbox_cell,
-      renderHeader: ({ selectedRows, currentData, toggleAllRows }) => (
-        <CheckBox
-          checked={
-            selectedRows.size === currentData.length && currentData.length > 0
-          }
-          onChange={toggleAllRows}
-        />
-      ),
-      render: (row, { selectedRows, toggleRowSelection }) => {
-        if (row.isSkeleton) {
-          return <Loader variant="skeleton" size="sm" />;
-        }
-        return (
-          <CheckBox
-            checked={selectedRows.has(row.id)}
-            onChange={() => toggleRowSelection(row.id)}
-          />
-        );
-      },
-    },
+    // {
+    //   key: "checkbox",
+    //   //   headerClassName: styles.checkbox_cell,
+    //   //   className: styles.checkbox_cell,
+    //   renderHeader: ({ selectedRows, currentData, toggleAllRows }) => (
+    //     <CheckBox
+    //       checked={
+    //         selectedRows.size === currentData.length && currentData.length > 0
+    //       }
+    //       onChange={toggleAllRows}
+    //     />
+    //   ),
+    //   render: (row, { selectedRows, toggleRowSelection }) => {
+    //     if (row.isSkeleton) {
+    //       return <Loader variant="skeleton" size="sm" />;
+    //     }
+    //     return (
+    //       <CheckBox
+    //         checked={selectedRows.has(row.id)}
+    //         onChange={() => toggleRowSelection(row.id)}
+    //       />
+    //     );
+    //   },
+    // },
     {
       key: "description",
       label: "Description",
@@ -121,7 +155,7 @@ function RecentActivity() {
       ),
     },
     {
-      key: "date",
+      key: "created_at",
       label: "Date",
       sortable: true,
       render: (row) => {
@@ -174,10 +208,6 @@ function RecentActivity() {
     created_at: new Date().toISOString(),
   }));
 
-  const tableData = isRecentActivityLoading
-    ? skeletonRows
-    : (recentActivity ?? []);
-
   return (
     <section className={styles.recent_activity}>
       <div className={styles.header}>
@@ -196,6 +226,7 @@ function RecentActivity() {
                 activityType: Array.isArray(activityTypes)
                   ? activityTypes.join(",")
                   : "",
+                page: "1",
               }));
             }}
           />
@@ -204,20 +235,25 @@ function RecentActivity() {
             options={[
               {
                 label: "Last 7 days",
-                value: "7_days",
+                value: buildDateRangeValue(7),
               },
               {
                 label: "Last 30 days",
-                value: "30_days",
+                value: buildDateRangeValue(30),
               },
             ]}
             position="bottom-right"
-            onSelect={(option) =>
+            onSelect={(option) => {
+              const startDate = option.value.slice(0, 10);
+              const endDate = option.value.slice(11);
+
               setQueryParams((prev) => ({
                 ...prev,
-                period: option.value,
-              }))
-            }
+                startDate,
+                endDate,
+                page: "1",
+              }));
+            }}
           />
         </div>
       </div>
@@ -265,6 +301,25 @@ function RecentActivity() {
         <DynamicTable
           columns={DEFAULT_COLUMNS}
           data={isRecentActivityLoading ? skeletonRows : (recentActivity ?? [])}
+          serverPagination
+          currentPage={currentPage}
+          perPage={perPage}
+          totalPages={totalPages}
+          totalItems={paginationMeta?.total}
+          onPageChange={(nextPage) =>
+            setQueryParams((prev) => ({
+              ...prev,
+              page: String(nextPage),
+            }))
+          }
+          onPerPageChange={(nextPerPage) =>
+            setQueryParams((prev) => ({
+              ...prev,
+              page: "1",
+              per_page: String(nextPerPage),
+              limit: String(nextPerPage),
+            }))
+          }
           emptyTitle="No recent activity"
           emptyMessage="Activity will appear here as it happens"
         />
