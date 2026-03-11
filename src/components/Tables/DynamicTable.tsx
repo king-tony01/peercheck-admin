@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import styles from "./styles/Table.module.css";
 import TableHeaderIcon from "@/icons/TableHeaderIcon";
 import DropdownInput from "../Input/DropdownInput";
@@ -53,10 +53,57 @@ function DynamicTable({
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
-  const totalPages = Math.ceil(data.length / perPage);
+  const sortedData = useMemo(() => {
+    if (!sortColumn) {
+      return data;
+    }
+
+    return [...data].sort((leftRow, rightRow) => {
+      const leftValue = leftRow[sortColumn];
+      const rightValue = rightRow[sortColumn];
+
+      if (leftValue == null && rightValue == null) {
+        return 0;
+      }
+
+      if (leftValue == null) {
+        return sortDirection === "asc" ? 1 : -1;
+      }
+
+      if (rightValue == null) {
+        return sortDirection === "asc" ? -1 : 1;
+      }
+
+      if (typeof leftValue === "number" && typeof rightValue === "number") {
+        return sortDirection === "asc"
+          ? leftValue - rightValue
+          : rightValue - leftValue;
+      }
+
+      const leftDate = Date.parse(String(leftValue));
+      const rightDate = Date.parse(String(rightValue));
+
+      if (!Number.isNaN(leftDate) && !Number.isNaN(rightDate)) {
+        return sortDirection === "asc"
+          ? leftDate - rightDate
+          : rightDate - leftDate;
+      }
+
+      const leftText = String(leftValue).toLowerCase();
+      const rightText = String(rightValue).toLowerCase();
+      const comparison = leftText.localeCompare(rightText, undefined, {
+        numeric: true,
+        sensitivity: "base",
+      });
+
+      return sortDirection === "asc" ? comparison : -comparison;
+    });
+  }, [data, sortColumn, sortDirection]);
+
+  const totalPages = Math.ceil(sortedData.length / perPage);
   const startIndex = (currentPage - 1) * perPage;
   const endIndex = startIndex + perPage;
-  const currentData = data.slice(startIndex, endIndex);
+  const currentData = sortedData.slice(startIndex, endIndex);
 
   const toggleRowSelection = (id: string) => {
     const newSelected = new Set(selectedRows);
@@ -241,7 +288,7 @@ function DynamicTable({
         </tbody>
       </table>
 
-      {data.length > 0 && (
+      {sortedData.length > 0 && (
         <div className={styles.pagination}>
           <div className={styles.page_info}>
             Page {currentPage} of {totalPages}

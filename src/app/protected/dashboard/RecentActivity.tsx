@@ -8,9 +8,7 @@ import CompaniesIcon from "@/icons/CompaniesIcon";
 import ReviewsIcon from "@/icons/ReviewsIcon";
 import styles from "./styles/Dashboard.module.css";
 import ActionDropdown from "@/components/Input/ActionDropdown";
-import FormatStatus from "@/components/wrappers/FormatStatus";
 import UserIcon from "@/icons/UserIcon";
-import CheckBox from "@/components/Input/CheckBox";
 import { useWindow } from "@/hooks/useWindow";
 import MobileTable from "@/components/Tables/MobileTable";
 import { FilterGroup } from "@/components/Filter/SmartFilter";
@@ -77,30 +75,30 @@ function RecentActivity() {
   };
 
   const DEFAULT_COLUMNS: TableColumn[] = [
-    {
-      key: "checkbox",
-      //   headerClassName: styles.checkbox_cell,
-      //   className: styles.checkbox_cell,
-      renderHeader: ({ selectedRows, currentData, toggleAllRows }) => (
-        <CheckBox
-          checked={
-            selectedRows.size === currentData.length && currentData.length > 0
-          }
-          onChange={toggleAllRows}
-        />
-      ),
-      render: (row, { selectedRows, toggleRowSelection }) => {
-        if (row.isSkeleton) {
-          return <Loader variant="skeleton" size="sm" />;
-        }
-        return (
-          <CheckBox
-            checked={selectedRows.has(row.id)}
-            onChange={() => toggleRowSelection(row.id)}
-          />
-        );
-      },
-    },
+    // {
+    //   key: "checkbox",
+    //   //   headerClassName: styles.checkbox_cell,
+    //   //   className: styles.checkbox_cell,
+    //   renderHeader: ({ selectedRows, currentData, toggleAllRows }) => (
+    //     <CheckBox
+    //       checked={
+    //         selectedRows.size === currentData.length && currentData.length > 0
+    //       }
+    //       onChange={toggleAllRows}
+    //     />
+    //   ),
+    //   render: (row, { selectedRows, toggleRowSelection }) => {
+    //     if (row.isSkeleton) {
+    //       return <Loader variant="skeleton" size="sm" />;
+    //     }
+    //     return (
+    //       <CheckBox
+    //         checked={selectedRows.has(row.id)}
+    //         onChange={() => toggleRowSelection(row.id)}
+    //       />
+    //     );
+    //   },
+    // },
     {
       key: "description",
       label: "Description",
@@ -121,7 +119,7 @@ function RecentActivity() {
       ),
     },
     {
-      key: "date",
+      key: "created_at",
       label: "Date",
       sortable: true,
       render: (row) => {
@@ -174,10 +172,6 @@ function RecentActivity() {
     created_at: new Date().toISOString(),
   }));
 
-  const tableData = isRecentActivityLoading
-    ? skeletonRows
-    : (recentActivity ?? []);
-
   return (
     <section className={styles.recent_activity}>
       <div className={styles.header}>
@@ -224,7 +218,7 @@ function RecentActivity() {
       {width <= 768 ? (
         <MobileTable
           headerTitle="Description"
-          showCheckbox={true}
+          showCheckbox={false}
           emptyTitle="No recent activity"
           emptyMessage="Activity will appear here as it happens"
           data={(isRecentActivityLoading

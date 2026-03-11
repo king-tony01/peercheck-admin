@@ -8,7 +8,6 @@ import CompaniesIcon from "@/icons/CompaniesIcon";
 import ReviewsIcon from "@/icons/ReviewsIcon";
 import styles from "../../dashboard/styles/Dashboard.module.css";
 import ActionDropdown from "@/components/Input/ActionDropdown";
-import FormatStatus from "@/components/wrappers/FormatStatus";
 import UserIcon from "@/icons/UserIcon";
 import CheckBox from "@/components/Input/CheckBox";
 import { useWindow } from "@/hooks/useWindow";
@@ -121,7 +120,7 @@ function RecentActivity() {
       ),
     },
     {
-      key: "date",
+      key: "created_at",
       label: "Date",
       sortable: true,
       render: (row) => {
@@ -173,10 +172,6 @@ function RecentActivity() {
     logName: "Loading...",
     created_at: new Date().toISOString(),
   }));
-
-  const tableData = isRecentActivityLoading
-    ? skeletonRows
-    : (recentActivity ?? []);
 
   return (
     <section className={styles.recent_activity}>
