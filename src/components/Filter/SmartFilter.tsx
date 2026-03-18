@@ -108,7 +108,10 @@ function SmartFilter({
 
   return (
     <section className={styles.filter_container} ref={panelRef}>
-      <button className={styles.filter_button} onClick={() => setOpen(!open)}>
+      <button
+        className={`${styles.filter_button} ${activeFilterCount > 0 ? styles.expanded : ""}`}
+        onClick={() => setOpen(!open)}
+      >
         <FilterIcon />
 
         {activeFilterCount > 0 && <span>({activeFilterCount})</span>}

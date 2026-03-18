@@ -115,7 +115,9 @@ function CompanyInsights() {
     },
     {
       title: "Total Company Page Visits",
-      value: isStatsError ? "N/A" : "--",
+      value: isStatsError
+        ? "N/A"
+        : (statsData?.totalCompanyPageVisits?.count ?? "--"),
       icon: <UsersIcon />,
       isLoading: isOverviewLoading,
       type: null,

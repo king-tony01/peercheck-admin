@@ -63,6 +63,7 @@ interface CompanyInsightsStats {
   totalCompaniesIndexed: TotalCompaniesIndexed;
   averageCompanyRating: AverageCompanyRating;
   mostReviewedCompany: MostReviewedCompany;
+  totalCompanyPageVisits: TotalCompanyPageVisits;
 }
 
 interface TotalCompaniesIndexed {
@@ -76,6 +77,11 @@ interface AverageCompanyRating {
 
 interface MostReviewedCompany {
   name: string;
+}
+
+interface TotalCompanyPageVisits {
+  count: number;
+  percentageChange: number;
 }
 
 interface EmergencyConcernSignal {
