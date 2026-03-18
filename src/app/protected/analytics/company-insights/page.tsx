@@ -105,7 +105,7 @@ function CompanyInsights() {
               ),
             }
           : undefined,
-      type: "more",
+      type: null,
       options: [
         {
           label: "Explore",
@@ -118,7 +118,7 @@ function CompanyInsights() {
       value: isStatsError ? "N/A" : "--",
       icon: <UsersIcon />,
       isLoading: isOverviewLoading,
-      type: "more",
+      type: null,
       options: [],
     },
     {
@@ -128,7 +128,7 @@ function CompanyInsights() {
         : (statsData?.averageCompanyRating?.rating ?? "--"),
       icon: <UsersIcon />,
       isLoading: isOverviewLoading,
-      type: "more",
+      type: null,
       options: [],
     },
     {
@@ -138,61 +138,61 @@ function CompanyInsights() {
         : (statsData?.mostReviewedCompany?.name ?? "--"),
       icon: <ReviewsIcon />,
       isLoading: isOverviewLoading,
-      type: "more",
+      type: null,
       options: [],
     },
   ];
 
-  const concerData = [
-    {
-      id: "1",
-      severity: "High",
-      company: "Polaris Bank",
-      info: "Rating dropped 1.2★ in 30 days. 15 reviews cite toxic leadership",
-    },
-    {
-      id: "2",
-      severity: "Medium",
-      company: "Zenith Bank",
-      info: "Increase in negative reviews about salary and benefits",
-    },
-    {
-      id: "3",
-      severity: "Low",
-      company: "Access Bank",
-      info: "Stable review trends with minor concerns about work-life balance",
-    },
-    {
-      id: "4",
-      severity: "High",
-      company: "GTBank",
-      info: "Significant drop in company rating. Multiple reviews mention management issues",
-    },
-    {
-      id: "5",
-      severity: "Medium",
-      company: "First Bank",
-      info: "Rising concerns about career growth opportunities among employees",
-    },
-    {
-      id: "6",
-      severity: "Low",
-      company: "UBA",
-      info: "Overall positive reviews but slight dip in ratings related to workplace culture",
-    },
-    {
-      id: "7",
-      severity: "Medium",
-      company: "Fidelity Bank",
-      info: "Noticeable increase in reviews mentioning workload stress",
-    },
-    {
-      id: "8",
-      severity: "High",
-      company: "Stanbic IBTC",
-      info: "Multiple reports of salary delays and dissatisfaction with benefits",
-    },
-  ];
+  // const concerData = [
+  //   {
+  //     id: "1",
+  //     severity: "High",
+  //     company: "Polaris Bank",
+  //     info: "Rating dropped 1.2★ in 30 days. 15 reviews cite toxic leadership",
+  //   },
+  //   {
+  //     id: "2",
+  //     severity: "Medium",
+  //     company: "Zenith Bank",
+  //     info: "Increase in negative reviews about salary and benefits",
+  //   },
+  //   {
+  //     id: "3",
+  //     severity: "Low",
+  //     company: "Access Bank",
+  //     info: "Stable review trends with minor concerns about work-life balance",
+  //   },
+  //   {
+  //     id: "4",
+  //     severity: "High",
+  //     company: "GTBank",
+  //     info: "Significant drop in company rating. Multiple reviews mention management issues",
+  //   },
+  //   {
+  //     id: "5",
+  //     severity: "Medium",
+  //     company: "First Bank",
+  //     info: "Rising concerns about career growth opportunities among employees",
+  //   },
+  //   {
+  //     id: "6",
+  //     severity: "Low",
+  //     company: "UBA",
+  //     info: "Overall positive reviews but slight dip in ratings related to workplace culture",
+  //   },
+  //   {
+  //     id: "7",
+  //     severity: "Medium",
+  //     company: "Fidelity Bank",
+  //     info: "Noticeable increase in reviews mentioning workload stress",
+  //   },
+  //   {
+  //     id: "8",
+  //     severity: "High",
+  //     company: "Stanbic IBTC",
+  //     info: "Multiple reports of salary delays and dissatisfaction with benefits",
+  //   },
+  // ];
 
   return (
     <PageLayout
@@ -244,14 +244,14 @@ function CompanyInsights() {
           />
         ) : null,
       ].filter(Boolean)}
-      leftNodes={[
-        <Button variant="secondary" key={"1"}>
-          <ExportIcon /> <span>Export Data</span>
-        </Button>,
-        <Button variant="secondary" key={"2"}>
-          <ClipBoardIcon /> <span>Create Report</span>
-        </Button>,
-      ]}
+      // leftNodes={[
+      //   <Button variant="secondary" key={"1"}>
+      //     <ExportIcon /> <span>Export Data</span>
+      //   </Button>,
+      //   <Button variant="secondary" key={"2"}>
+      //     <ClipBoardIcon /> <span>Create Report</span>
+      //   </Button>,
+      // ]}
     >
       <div>
         <section className={styles.overview}>

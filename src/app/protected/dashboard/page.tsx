@@ -142,24 +142,24 @@ function Dashboard() {
           }
         />
       }
-      leftNodes={[
-        <Button
-          variant="secondary"
-          key={"1"}
-          overrideStyles={{ width: "100%" }}
-          size="medium"
-        >
-          <ExportIcon /> <span>Export Data</span>
-        </Button>,
-        <Button
-          variant="secondary"
-          key={"2"}
-          overrideStyles={{ width: "100%" }}
-          size="medium"
-        >
-          <ClipBoardIcon /> <span>Create Report</span>
-        </Button>,
-      ]}
+      // leftNodes={[
+      //   <Button
+      //     variant="secondary"
+      //     key={"1"}
+      //     overrideStyles={{ width: "100%" }}
+      //     size="medium"
+      //   >
+      //     <ExportIcon /> <span>Export Data</span>
+      //   </Button>,
+      //   <Button
+      //     variant="secondary"
+      //     key={"2"}
+      //     overrideStyles={{ width: "100%" }}
+      //     size="medium"
+      //   >
+      //     <ClipBoardIcon /> <span>Create Report</span>
+      //   </Button>,
+      // ]}
     >
       <section className={styles.overview}>
         <div className={styles.cards}>
