@@ -1,12 +1,12 @@
 "use client";
 import styles from "./styles/MainLayout.module.css";
-import React from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ChevronLeft from "@/icons/ChevronLeft";
 import PageLangaugeSelector from "@/components/pageLanguage/PageLangaugeSelector";
 import { useTranslation } from "@/hooks/useTranslation";
 
-function FullViewPage() {
+function FullViewPageContent() {
   const { t } = useTranslation();
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "Full View";
@@ -36,4 +36,10 @@ function FullViewPage() {
   );
 }
 
-export default FullViewPage;
+export default function FullViewPage() {
+  return (
+    <Suspense fallback={null}>
+      <FullViewPageContent />
+    </Suspense>
+  );
+}

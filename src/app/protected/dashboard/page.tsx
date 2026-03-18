@@ -20,7 +20,7 @@ import { ROUTE_PATHS } from "@/routes/routePaths";
 
 function Dashboard() {
   const [filters, setFilters] = React.useState({
-    period: "",
+    period: "month",
   });
   const {
     data: overviewData,
@@ -148,8 +148,8 @@ function Dashboard() {
           type="primary"
           options={[
             {
-              label: "Weekly",
-              value: "week",
+              label: "All Time",
+              value: "alltime",
             },
             {
               label: "Monthly",
@@ -161,6 +161,10 @@ function Dashboard() {
             },
           ]}
           position="bottom-right"
+          selectedOption={{
+            value: "month",
+            label: "Monthly",
+          }}
           onSelect={(opt) =>
             setFilters((prev) => ({ ...prev, period: opt.value }))
           }
