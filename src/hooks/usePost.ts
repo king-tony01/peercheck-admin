@@ -119,6 +119,8 @@ export const usePost = <TData = unknown, TVariables = unknown>(
         if (apiError.status === 401) {
           showToast(apiError.message || "Session expired.", {
             type: "warning",
+            dedupeKey: "auth:unauthorized",
+            dedupeWindowMs: 4000,
           });
           router.push(ROUTE_PATHS.ADMIN_LOGIN);
         } else {

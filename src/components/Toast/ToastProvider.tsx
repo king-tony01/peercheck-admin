@@ -26,6 +26,8 @@ type ToastOptions = {
   type?: ToastType;
   description?: string;
   duration?: number;
+  dedupeKey?: string;
+  dedupeWindowMs?: number;
 };
 
 type ToastContextValue = {
@@ -52,6 +54,12 @@ const toastIcon: Record<ToastType, React.ReactNode> = {
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+  const recentlyShown = useRef<Record<string, number>>({});
+
+  const clearAllTimers = useCallback(() => {
+    Object.values(timers.current).forEach((timer) => clearTimeout(timer));
+    timers.current = {};
+  }, []);
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
@@ -64,6 +72,18 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
   const showToast = useCallback(
     (message: string, options?: ToastOptions) => {
+      const now = Date.now();
+      const dedupeKey =
+        options?.dedupeKey ?? `${options?.type ?? "info"}::${message}`;
+      const dedupeWindowMs = options?.dedupeWindowMs ?? 1200;
+      const lastShownAt = recentlyShown.current[dedupeKey] ?? 0;
+
+      if (now - lastShownAt < dedupeWindowMs) {
+        return;
+      }
+
+      recentlyShown.current[dedupeKey] = now;
+
       const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
       const toast: ToastItem = {
         id,
@@ -73,13 +93,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         duration: options?.duration ?? 4000,
       };
 
-      setToasts((prev) => [toast, ...prev]);
+      clearAllTimers();
+      setToasts([toast]);
 
       timers.current[id] = setTimeout(() => {
         removeToast(id);
       }, toast.duration);
     },
-    [removeToast],
+    [clearAllTimers, removeToast],
   );
 
   return (
