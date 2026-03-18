@@ -1,7 +1,6 @@
 export const BACKEND_ROUTES = {
   LOGIN_ADMIN: "/admin/auth/login",
-  DASHBOARD_OVERVIEW: (params: Record<string, string>) =>
-    `/admin/statistics/dashboard/overview?${new URLSearchParams(params).toString()}`,
+  DASHBOARD_OVERVIEW: "/admin/statistics/dashboard/overview",
   DASHBOARD_USER_ENGAGEMENT_CHART:
     "/admin/statistics/dashboard/user-engagement",
   ANALYTICS_COMPANY_INSIGHTS: "/admin/statistics/company-analytics",
@@ -15,8 +14,7 @@ export const BACKEND_ROUTES = {
   ANALYTICS_USERS_INSIGHTS: "/admin/statistics/user-analytics",
   ANALYTICS_EMERGENCY_CONCERN_SIGNALS:
     "/admin/insights/concern-signals/recents",
-  DASHBOARD_RECENT_ACTIVITY: (params: Record<string, string>) =>
-    `/admin/logs/recent?${new URLSearchParams(params).toString()}`,
+  DASHBOARD_RECENT_ACTIVITY: "/admin/logs/recent",
   DASHBOARD_ACTIVITY_TYPES: "/settings/activity-types",
   LOGOUT_ADMIN: "/admin/auth/logout",
   SAMPLE_COMPANIES: "/admin/companies",

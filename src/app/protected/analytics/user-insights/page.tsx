@@ -51,7 +51,7 @@ function UserInsights() {
           }
         : undefined,
       isLoading,
-      type: "more",
+      type: null,
       options: [
         {
           label: "Explore",
@@ -70,7 +70,7 @@ function UserInsights() {
           }
         : undefined,
       isLoading,
-      type: "more",
+      type: null,
       options: [],
     },
     {
@@ -82,7 +82,7 @@ function UserInsights() {
           : 0,
       icon: <UsersIcon />,
       isLoading,
-      type: "more",
+      type: null,
       options: [],
     },
     {
@@ -94,7 +94,7 @@ function UserInsights() {
           : "",
       icon: <ReviewsIcon />,
       isLoading,
-      type: "more",
+      type: null,
       options: [],
     },
   ];
@@ -151,14 +151,14 @@ function UserInsights() {
           position="bottom-right"
         />
       }
-      leftNodes={[
-        <Button variant="secondary" key={"1"}>
-          <ExportIcon /> <span>Export Data</span>
-        </Button>,
-        <Button variant="secondary" key={"2"}>
-          <ClipBoardIcon /> <span>Create Report</span>
-        </Button>,
-      ]}
+      // leftNodes={[
+      //   <Button variant="secondary" key={"1"}>
+      //     <ExportIcon /> <span>Export Data</span>
+      //   </Button>,
+      //   <Button variant="secondary" key={"2"}>
+      //     <ClipBoardIcon /> <span>Create Report</span>
+      //   </Button>,
+      // ]}
     >
       <div>
         <section className={styles.overview}>

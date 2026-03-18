@@ -56,6 +56,8 @@ export async function proxyToApi(req: Request | NextRequest, path: string) {
 
   let res: Response;
   try {
+    console.log(targetWithQuery);
+
     res = await fetch(targetWithQuery, {
       method: (req as Request).method || "GET",
       headers,

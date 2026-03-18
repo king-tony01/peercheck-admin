@@ -2,7 +2,7 @@ interface MetricCard {
   title: string;
   value: string | number;
   icon: React.ReactNode;
-  type: "more" | "link";
+  type: "more" | "link" | null;
   path?: string;
   options?: DropdownOption[];
   isLoading?: boolean;

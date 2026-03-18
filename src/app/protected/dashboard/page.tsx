@@ -16,10 +16,11 @@ import InstitutionsIcon from "@/icons/InstitutionsIcon";
 import UsersIcon from "@/icons/UsersIcon";
 import ReviewsIcon from "@/icons/ReviewsIcon";
 import MetricCard from "@/components/Cards/MetricCard";
+import { ROUTE_PATHS } from "@/routes/routePaths";
 
 function Dashboard() {
   const [filters, setFilters] = React.useState({
-    period: "",
+    period: "month",
   });
   const {
     data: overviewData,
@@ -50,6 +51,17 @@ function Dashboard() {
   const hasError = isError;
   const showMetrics = !isLoading && !hasError;
 
+  const buildFullViewPath = React.useCallback(
+    (title: string, value: string | number) => {
+      const params = new URLSearchParams({
+        title,
+        value: String(value),
+      });
+      return `${ROUTE_PATHS.FULL_VIEW}?${params.toString()}`;
+    },
+    [],
+  );
+
   const overviewCards: MetricCard[] = [
     {
       title: "All Companies",
@@ -63,7 +75,10 @@ function Dashboard() {
         : undefined,
       isLoading,
       type: "link",
-      path: "/admin/companies",
+      path: buildFullViewPath(
+        "All Companies",
+        hasError ? "N/A" : (overviewData?.allCompanies?.count ?? 0),
+      ),
     },
     {
       title: "All Institutions",
@@ -77,7 +92,10 @@ function Dashboard() {
         : undefined,
       isLoading,
       type: "link",
-      path: "/admin/institutions",
+      path: buildFullViewPath(
+        "All Institutions",
+        hasError ? "N/A" : (overviewData?.allInstitutions?.count ?? 0),
+      ),
     },
     {
       title: "Total Users",
@@ -92,7 +110,10 @@ function Dashboard() {
         : undefined,
       isLoading,
       type: "link",
-      path: "/admin/analytics/user-insights",
+      path: buildFullViewPath(
+        "Total Users",
+        hasError ? "N/A" : (overviewData?.totalUsers?.count ?? 0),
+      ),
     },
     {
       title: "Total Reviews Submitted",
@@ -113,7 +134,10 @@ function Dashboard() {
         : undefined,
       isLoading,
       type: "link",
-      path: "/admin/reviews",
+      path: buildFullViewPath(
+        "Total Reviews Submitted",
+        hasError ? "N/A" : (overviewData?.totalReviewsSubmitted?.count ?? 0),
+      ),
     },
   ];
   return (
@@ -124,8 +148,8 @@ function Dashboard() {
           type="primary"
           options={[
             {
-              label: "Weekly",
-              value: "week",
+              label: "All Time",
+              value: "alltime",
             },
             {
               label: "Monthly",
@@ -137,29 +161,33 @@ function Dashboard() {
             },
           ]}
           position="bottom-right"
+          selectedOption={{
+            value: "month",
+            label: "Monthly",
+          }}
           onSelect={(opt) =>
             setFilters((prev) => ({ ...prev, period: opt.value }))
           }
         />
       }
-      leftNodes={[
-        <Button
-          variant="secondary"
-          key={"1"}
-          overrideStyles={{ width: "100%" }}
-          size="medium"
-        >
-          <ExportIcon /> <span>Export Data</span>
-        </Button>,
-        <Button
-          variant="secondary"
-          key={"2"}
-          overrideStyles={{ width: "100%" }}
-          size="medium"
-        >
-          <ClipBoardIcon /> <span>Create Report</span>
-        </Button>,
-      ]}
+      // leftNodes={[
+      //   <Button
+      //     variant="secondary"
+      //     key={"1"}
+      //     overrideStyles={{ width: "100%" }}
+      //     size="medium"
+      //   >
+      //     <ExportIcon /> <span>Export Data</span>
+      //   </Button>,
+      //   <Button
+      //     variant="secondary"
+      //     key={"2"}
+      //     overrideStyles={{ width: "100%" }}
+      //     size="medium"
+      //   >
+      //     <ClipBoardIcon /> <span>Create Report</span>
+      //   </Button>,
+      // ]}
     >
       <section className={styles.overview}>
         <div className={styles.cards}>

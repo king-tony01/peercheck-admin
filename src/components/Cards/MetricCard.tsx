@@ -42,7 +42,7 @@ function MetricCard({
         <Link href={path} className={styles.action_btn}>
           <ArrowUpRight />
         </Link>
-      ) : (
+      ) : type === "more" ? (
         <div className={styles.action_btn_drop}>
           <ActionDropdown
             options={options ?? []}
@@ -51,7 +51,7 @@ function MetricCard({
             customIcon={<EllipsisHorizontal />}
           />
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

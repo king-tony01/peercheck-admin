@@ -189,32 +189,32 @@ function RecentActivity() {
     //   sortable: true,
     //   render: (row) => <FormatStatus status={row.status} />,
     // },
-    {
-      key: "actions",
-      headerClassName: styles.actions_cell,
-      className: styles.actions_cell,
-      renderHeader: () => null,
-      render: (row) => {
-        if (row.isSkeleton) {
-          return <Loader variant="skeleton" size="sm" />;
-        }
-        return (
-          <ActionDropdown
-            type="primary"
-            options={[
-              {
-                label: "View Details",
-                value: "view_details",
-              },
-              {
-                label: "Edit Activity",
-                value: "edit_activity",
-              },
-            ]}
-          />
-        );
-      },
-    },
+    // {
+    //   key: "actions",
+    //   headerClassName: styles.actions_cell,
+    //   className: styles.actions_cell,
+    //   renderHeader: () => null,
+    //   render: (row) => {
+    //     if (row.isSkeleton) {
+    //       return <Loader variant="skeleton" size="sm" />;
+    //     }
+    //     return (
+    //       <ActionDropdown
+    //         type="primary"
+    //         options={[
+    //           {
+    //             label: "View Details",
+    //             value: "view_details",
+    //           },
+    //           {
+    //             label: "Edit Activity",
+    //             value: "edit_activity",
+    //           },
+    //         ]}
+    //       />
+    //     );
+    //   },
+    // },
   ];
 
   // Generate skeleton rows for loading state
