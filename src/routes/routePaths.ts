@@ -16,4 +16,5 @@ export const ROUTE_PATHS = {
   ADMIN_SUPPORT: "/protected/support",
   ADMIN_LOGIN: "/login",
   ADMIN_LOGIN_VERIFY: "/login/verify",
+  FULL_VIEW: "/fullview",
 };
